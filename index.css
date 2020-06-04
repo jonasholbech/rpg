@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+#players {
+  display: flex;
+}
+rpg-player {
+  border: 1px solid #000;
+  min-width: 300px;
+}
+rpg-player header {
+  position: relative;
+}
+rpg-player header h1,
+rpg-player header .hp,
+rpg-player header .xp {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+}
+rpg-player header .hp {
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 3rem;
+  padding: 0.3rem;
+}
+rpg-player header .xp {
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  transform: scaleX(0);
+  height: 10px;
+  background: blue;
+  transform-origin: left;
+  transition: 1s transform;
+}
+rpg-player img {
+  width: 100%;
+  height: auto;
+}
+
+rpg-player .attributes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+  gap: 0.5rem;
+}
+rpg-player dl {
+  display: contents;
+}
+rpg-player dl,
+rpg-player dt,
+rpg-player dd {
+  margin: 0;
+  padding: 0;
+}
+rpg-player ol {
+  list-style-type: none;
+  padding: 0.5rem;
+}
