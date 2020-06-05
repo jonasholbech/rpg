@@ -1,4 +1,5 @@
 import { Machine, assign } from "xstate";
+import guards from "./machineparts/guards";
 import { observer } from "./observer";
 
 import monsters from "./monsters";
@@ -8,6 +9,8 @@ import { all as weapons, rndWeaponForLevel } from "./weapons";
 //TODO: healing?
 //TODO: store every x levels or pick where to go
 //TODO: potions
+//TODO: choose to pickup?
+//TODO: carry weight = strength?
 
 const RPGMachine = Machine(
   {
@@ -110,27 +113,7 @@ const RPGMachine = Machine(
     },
   },
   {
-    guards: {
-      returnFalse: (context, evt) => {
-        return false;
-      },
-      isAI: (ctx, evt) => {
-        return ctx.players[ctx.currentPlayer].AI;
-      },
-      bothAlive: (ctx, event) => {
-        return ctx.players.every((pl) => pl.hitpoints > 0);
-      },
-      AIDied: (ctx) => {
-        const AI = ctx.players.find((pl) => pl.AI);
-        return AI.hitpoints < 1;
-      },
-      checkLevelUp: (context, evt) => {
-        return (
-          context.players[context.currentPlayer].xp >=
-          context.players[context.currentPlayer].level * 1000
-        );
-      },
-    },
+    guards,
     actions: {
       justLogIt: (ctx, evt, { action }) => {
         console.log(action);
