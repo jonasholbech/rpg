@@ -1,6 +1,10 @@
 * {
   box-sizing: border-box;
 }
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
 #players {
   display: flex;
 }
@@ -59,4 +63,31 @@ rpg-player dd {
 rpg-player ol {
   list-style-type: none;
   padding: 0.5rem;
+}
+
+rpg-levelup {
+  background: rgba(0, 0, 0, 0.4);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+rpg-levelup section {
+  background: white;
+  padding: 2rem;
+}
+rpg-logger {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+rpg-logger dl {
+  border: 1px solid hotpink;
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

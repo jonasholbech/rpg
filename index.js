@@ -4,7 +4,8 @@ import RPGMachine from "./modules/machine";
 
 import Player from "./components/Player";
 import InterpreterComponent from "./components/InterpreterComponent";
-
+import LevelUp from "./components/LevelUp";
+import Logger from "./components/Logger";
 const extendedMachine = RPGMachine.withConfig({
   /*actions: {
     UIclearForm: clearForm(),
@@ -18,6 +19,10 @@ const service = interpret(extendedMachine).onTransition((state) => {
   console.groupCollapsed("logger");
   console.log(state.value);
   console.log(state.context);
+  console.log(
+    state.context.players[0].weapons[0],
+    state.context.players[1].weapons[0]
+  );
   console.log(state);
   console.groupEnd();
   render(state);
@@ -43,6 +48,7 @@ function firstPaint(initialContext) {
 
   setTimeout(() => {
     document.querySelector("rpg-interpreter").service = service;
+    document.querySelector("rpg-interpreter").state = {}; //TODO: initialstate
     document.querySelectorAll("rpg-player").forEach((player, index) => {
       player.service = service;
     });
@@ -53,18 +59,36 @@ firstPaint(extendedMachine.context);
 
 function render(state) {
   document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
+  document.querySelector("rpg-interpreter").state = state;
   //document.querySelector("rpg-player").str = Date.now();
   document.querySelectorAll("rpg-player").forEach((player, index) => {
     player.nextEvents = state.nextEvents;
-
+    player.state = state.context.players[index];
     player.hitpoints = state.context.players[index].hitpoints;
     player.xp = state.context.players[index].xp;
+    player.str = state.context.players[index].attributes.str;
+    player.dex = state.context.players[index].attributes.dex;
+    player.con = state.context.players[index].attributes.con;
+    player.level = state.context.players[index].level;
     if (index === state.context.currentPlayer) {
       player.active = true;
     } else {
       player.active = false;
     }
   });
+  switch (state.value) {
+    case "levelUp":
+      openLevelUpScreen(state);
+      break;
+  }
 }
 
+function openLevelUpScreen(state) {
+  const lu = document.createElement("rpg-levelup");
+  lu.str = state.context.players[state.context.currentPlayer].attributes.str;
+  lu.dex = state.context.players[state.context.currentPlayer].attributes.dex;
+  lu.con = state.context.players[state.context.currentPlayer].attributes.con;
+  lu.completeCallback = service.send;
+  document.body.appendChild(lu);
+}
 //window.addEventListener("load", () => firstPaint(extendedMachine.context));

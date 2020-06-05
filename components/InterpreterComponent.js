@@ -11,6 +11,10 @@ export default class InterpreterComponent extends HTMLElement {
   set service(service) {
     this._service = service;
   }
+  set state(state) {
+    this._state = state;
+    this._render();
+  }
   get nextEvents() {
     return this._events;
   }
@@ -21,7 +25,8 @@ export default class InterpreterComponent extends HTMLElement {
     this._render();
   }
   _render() {
-    this.innerHTML = `<h1>hi im the interpreter </h1>
+    const state = this._state ? this._state.value : "not known";
+    this.innerHTML = `<h1>hi im the interpreter ${state}</h1>
     <ul></ul>
     
     

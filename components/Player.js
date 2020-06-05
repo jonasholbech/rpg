@@ -2,15 +2,19 @@ export default class Player extends HTMLElement {
   constructor() {
     super();
     this._renderCount = 0;
+    this._state = {};
   }
   static get observedAttributes() {
-    return ["str", "dex", "con", "hitpoints", "active", "xp"];
+    return ["str", "dex", "con", "hitpoints", "active", "xp", "level"];
   }
   attributeChangedCallback(name, oldVal, newVal) {
     this._render();
   }
   set str(val) {
     this.setAttribute("str", val);
+  }
+  set level(val) {
+    this.setAttribute("level", val);
   }
   set xp(val) {
     this.setAttribute("xp", val);
@@ -40,6 +44,10 @@ export default class Player extends HTMLElement {
     this._weapons = weapons;
     this._updateWeaponList();
   }
+  set state(ctx) {
+    this._state = ctx;
+    this._render();
+  }
   connectedCallback() {
     this._render();
   }
@@ -48,12 +56,14 @@ export default class Player extends HTMLElement {
     this._renderCount++;
     this.innerHTML = `
       <header>
-          <h1>${this.getAttribute("name")} ${this._renderCount}</h1>
+          <h1>${this._state.name} ${this._renderCount}</h1>
           <img src="https://avatars.dicebear.com/v2/bottts/${this.getAttribute(
             "name"
           )}.svg" />
           <div class="xp" style="transform:scaleX(${
-            (this.getAttribute("xp") / 1000) * 100
+            (this.getAttribute("xp") /
+              (Number(this.getAttribute("level")) * 1000)) *
+            100
           }%)"></div>
           <div class="hp">${this.getAttribute("hitpoints")}</div>
       </header>
@@ -95,11 +105,8 @@ export default class Player extends HTMLElement {
   }
   _updateWeaponList() {
     if (this._weapons) {
-      //TODO what about an empty array?
-      //console.log(this._weapons);
       const list = this.querySelector(".weapons ol");
       list.innerHTML = "";
-      //const weaponList = [];
       this._weapons.forEach((w, i) => {
         const li = document.createElement("li");
         const span = document.createElement("span");
