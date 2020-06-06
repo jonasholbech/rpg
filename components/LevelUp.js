@@ -106,19 +106,6 @@ export default class LevelUp extends HTMLElement {
     if (sum === 2) {
       this.querySelector(".complete").disabled = false;
     }
-    /*
-    if (sum === 2) {
-      //only subtract
-      if (this._increased.str) {
-        this.querySelector('[data-attribute="str"] .subtract').disabled = false;
-      }
-      if (this._increased.dex) {
-        this.querySelector('[data-attribute="dex"] .subtract').disabled = false;
-      }
-      if (this._increased.con) {
-        this.querySelector('[data-attribute="con"] .subtract').disabled = false;
-      }
-    }*/
   }
 }
 customElements.define("rpg-levelup", LevelUp);

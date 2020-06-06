@@ -6,6 +6,8 @@ import Player from "./components/Player";
 import InterpreterComponent from "./components/InterpreterComponent";
 import LevelUp from "./components/LevelUp";
 import Logger from "./components/Logger";
+import PostBattle from "./components/PostBattle";
+
 const extendedMachine = RPGMachine.withConfig({
   /*actions: {
     UIclearForm: clearForm(),
@@ -15,18 +17,20 @@ const extendedMachine = RPGMachine.withConfig({
   },*/
 });
 
-const service = interpret(extendedMachine).onTransition((state) => {
-  console.groupCollapsed("logger");
-  console.log(state.value);
-  console.log(state.context);
-  console.log(
-    state.context.players[0].weapons[0],
-    state.context.players[1].weapons[0]
-  );
-  console.log(state);
-  console.groupEnd();
-  render(state);
-});
+const service = interpret(extendedMachine, { devTools: true }).onTransition(
+  (state) => {
+    console.groupCollapsed("logger");
+    console.log(state.value);
+    console.log(state.context);
+    console.log(
+      state.context.players[0].weapons[0],
+      state.context.players[1].weapons[0]
+    );
+    console.log(state);
+    console.groupEnd();
+    render(state);
+  }
+);
 
 window.service = service;
 
@@ -80,6 +84,9 @@ function render(state) {
     case "levelUp":
       openLevelUpScreen(state);
       break;
+    case "postBattle":
+      openPostBattleScreen(state);
+      break;
   }
 }
 
@@ -90,5 +97,11 @@ function openLevelUpScreen(state) {
   lu.con = state.context.players[state.context.currentPlayer].attributes.con;
   lu.completeCallback = service.send;
   document.body.appendChild(lu);
+}
+function openPostBattleScreen(state) {
+  const pbsComp = document.createElement("rpg-postbattle");
+  pbsComp.state = state;
+  pbsComp.send = service.send;
+  document.body.appendChild(pbsComp);
 }
 //window.addEventListener("load", () => firstPaint(extendedMachine.context));

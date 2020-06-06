@@ -1,13 +1,13 @@
 import { assign } from "xstate";
-import monsters from "../monsters";
-import { rndWeaponForLevel } from "../weapons";
+import { setupMonster } from "../monsters";
+
 import { observer } from "../observer";
 const methods = {
   awardXP: assign({
     //TODO: xp kunne være summen af opponents stats?
     players: (ctx, evt) => {
       const players = [...ctx.players];
-      players[ctx.currentPlayer].xp += 1000;
+      players[ctx.currentPlayer].xp += 100;
       return players;
     },
   }),
@@ -90,10 +90,7 @@ const methods = {
   createNewEnemy: assign({
     players: (ctx) => {
       const players = [...ctx.players];
-      players[1] = monsters[Math.floor(Math.random() * monsters.length)]; //TODO: index hardcodet, skulle jeg finde .AI?
-      players[1].weapons = [rndWeaponForLevel(players[1].level)];
-      players[1].hitpoints = players[1].attributes.con * 2;
-      players[1].AI = true;
+      players[1] = setupMonster(); //TODO: index hardcodet, should it be?
       console.log(observer);
       observer.publish(
         "LOG",
@@ -102,18 +99,29 @@ const methods = {
       return players;
     },
   }),
-  pickupTreasures: assign({
-    players: (ctx) => {
+  dropStuff: assign({
+    players: (ctx, evt) => {
       const players = [...ctx.players];
-      observer.publish(
-        "LOG",
-        `Player picked up a ${players[1].weapons[0].name}`
-      );
-
-      players[0].weapons.push(players[1].weapons[0]);
+      players[0].weapons.splice(Number(evt.index), 1);
       return players;
     },
   }),
+  pickUpStuff: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      console.log(ctx.players[1], evt.index);
+      const index = Number(evt.index);
+      observer.publish(
+        "LOG",
+        `Player picked up a ${players[1].weapons[index].name}`
+      );
+
+      players[0].weapons.push(players[1].weapons[index]);
+      players[1].weapons.splice(index, 1);
+      return players;
+    },
+  }),
+
   justLogIt: (ctx, evt, { action }) => {
     console.log(action);
     console.log("logging it", ctx, evt);
@@ -135,6 +143,7 @@ export const {
   applyNewStats,
   setInitialStats,
   createNewEnemy,
-  pickupTreasures,
+  pickUpStuff,
+  dropStuff,
   justLogIt,
 } = methods;

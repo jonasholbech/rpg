@@ -65,7 +65,8 @@ rpg-player ol {
   padding: 0.5rem;
 }
 
-rpg-levelup {
+rpg-levelup,
+rpg-postbattle {
   background: rgba(0, 0, 0, 0.4);
   width: 100vw;
   height: 100vh;
@@ -75,9 +76,17 @@ rpg-levelup {
   justify-content: center;
   align-items: center;
 }
-rpg-levelup section {
+rpg-levelup section,
+rpg-postbattle section {
   background: white;
   padding: 2rem;
+}
+rpg-postbattle section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+rpg-postbattle section h1 {
+  grid-column: span 2;
 }
 rpg-logger {
   height: 100%;

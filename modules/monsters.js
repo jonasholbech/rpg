@@ -1,4 +1,5 @@
-export default [
+import { rndWeaponForLevel } from "./weapons";
+export const monsters = [
   {
     name: "Snotling",
     AI: true,
@@ -19,3 +20,10 @@ export default [
     },
   },
 ];
+export function setupMonster() {
+  const monster = monsters[Math.floor(Math.random() * monsters.length)];
+  monster.weapons = [rndWeaponForLevel(monster.level)];
+  monster.hitpoints = monster.attributes.con * 2;
+  monster.AI = true;
+  return monster;
+}
