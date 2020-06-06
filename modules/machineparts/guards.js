@@ -5,6 +5,9 @@ const guards = {
   isAI: (ctx, evt) => {
     return ctx.players[ctx.currentPlayer].AI;
   },
+  hasItems: (ctx, evt) => {
+    return ctx.players[ctx.currentPlayer].items.length > 0; //TODO: filter on usable
+  },
   bothAlive: (ctx, event) => {
     return ctx.players.every((pl) => pl.hitpoints > 0);
   },

@@ -83,6 +83,7 @@ rpg-postbattle section {
 }
 rpg-postbattle section {
   display: grid;
+  gap: 1rem;
   grid-template-columns: 1fr 1fr;
 }
 rpg-postbattle section h1 {

@@ -44,6 +44,10 @@ export default class Player extends HTMLElement {
     this._weapons = weapons;
     this._updateWeaponList();
   }
+  set items(items) {
+    this._items = items;
+    this._updateItemsList();
+  }
   set state(ctx) {
     this._state = ctx;
     this._render();
@@ -81,8 +85,12 @@ export default class Player extends HTMLElement {
       <div class="weapons">
           <ol></ol>  
       </div>
+      <div class="items">
+          <ol></ol>  
+      </div>
   `;
     this._updateWeaponList();
+    this._updateItemsList();
     this._setActions();
   }
   _setActions() {
@@ -100,6 +108,34 @@ export default class Player extends HTMLElement {
           };
           this.querySelector(".actions").appendChild(b);
         }
+      });
+    }
+  }
+  _updateItemsList() {
+    if (this._items) {
+      const list = this.querySelector(".items ol");
+      list.innerHTML = "";
+      this._items.forEach((w, i) => {
+        const li = document.createElement("li");
+        const span = document.createElement("span");
+        let b;
+        if (w.usable) {
+          b = document.createElement("button");
+          b.textContent = "Use";
+          b.addEventListener("click", (e) => {
+            //this._switch(i);
+            //console.log("//TODO:");
+            this._use_item(i);
+          });
+        }
+        span.textContent = `${w.name}`;
+
+        if (b) {
+          li.appendChild(b);
+        }
+
+        li.appendChild(span);
+        list.appendChild(li);
       });
     }
   }
@@ -139,6 +175,12 @@ export default class Player extends HTMLElement {
   _switch(index) {
     this._service.send({
       type: "SWITCH_WEAPON",
+      index: index,
+    });
+  }
+  _use_item(index) {
+    this._service.send({
+      type: "USE_ITEM",
       index: index,
     });
   }

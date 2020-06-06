@@ -18,12 +18,16 @@ export default class PostBattle extends HTMLElement {
       <section>
         <h1>Post Battle</h1>
         <div class="player">
-            <h2>Player</h2>
+            <h2>Player Weapons</h2>
             <ol>${this._setWeaponsPlayer()}</ol>
+            <h2>Player Items</h2>
+            <ol>${this._setItemsPlayer()}</ol>
         </div>
         <div class="monster">
-            <h2>Monster</h2>
+            <h2>Monster Weapons</h2>
             <ol>${this._setWeaponsMonster()}</ol>
+            <h2>Monster Items</h2>
+            <ol>${this._setItemsMonster()}</ol>
         </div>
         <button id="next">Leave</button>
         <button id="teleport">Teleport to town</button>
@@ -39,23 +43,43 @@ export default class PostBattle extends HTMLElement {
     this._toggleButtons();
   }
   _setWeaponsPlayer() {
+    //TODO:: setWeap, setitem player, monster are the same, refractor
     let data = "";
-    console.log(this._state);
     this._state.context.players[0].weapons.forEach((w, i) => {
-      data += `<li><button data-index="${i}">Drop</button> ${w.name} (${w.damageMin}-${w.damageMax})</li>`;
+      data += `<li><button data-type="weapon" data-index="${i}">Drop</button> ${w.name} (${w.damageMin}-${w.damageMax})</li>`;
     });
     return data;
   }
   _setWeaponsMonster() {
     let data = "";
-    console.log(this._state);
     const disabled =
       this._state.context.players[0].attributes.str >
       this._state.context.players[0].weapons.length
         ? ""
         : "disabled";
     this._state.context.players[1].weapons.forEach((w, i) => {
-      data += `<li><button ${disabled} data-index="${i}">Take</button> ${w.name} (${w.damageMin}-${w.damageMax})</li>`;
+      data += `<li><button ${disabled} data-type="weapon" data-index="${i}">Take</button> ${w.name} (${w.damageMin}-${w.damageMax})</li>`;
+    });
+    return data;
+  }
+  _setItemsPlayer() {
+    let data = "";
+    this._state.context.players[0].items.forEach((w, i) => {
+      data += `<li><button data-type="item" data-index="${i}">Drop</button> ${w.name}</li>`;
+    });
+    return data;
+  }
+  _setItemsMonster() {
+    let data = "";
+    const disabled =
+      this._state.context.players[0].attributes.str >
+      this._state.context.players[0].items.length
+        ? ""
+        : "disabled";
+    this._state.context.players[1].items.forEach((w, i) => {
+      data += `<li><button ${disabled} data-payload='${JSON.stringify(
+        w.payload
+      )}' data-type="item" data-index="${i}">Take</button> ${w.name}</li>`;
     });
     return data;
   }
@@ -63,22 +87,38 @@ export default class PostBattle extends HTMLElement {
     this.querySelectorAll(".player button").forEach((btn) => {
       btn.addEventListener("click", (evt) => {
         const index = evt.target.dataset.index;
-        console.log(index);
-        this._send({
-          type: "DROP_WEAPON",
-          index: index,
-        });
+        const type = evt.target.dataset.type;
+        if (type === "weapon") {
+          this._send({
+            type: "DROP_WEAPON",
+            index: index,
+          });
+        } else {
+          this._send({
+            type: "DROP_ITEM",
+            index: index,
+          });
+        }
         this.remove();
       });
     });
     this.querySelectorAll(".monster button").forEach((btn) => {
       btn.addEventListener("click", (evt) => {
         const index = evt.target.dataset.index;
-        console.log(index);
-        this._send({
-          type: "PICKUP_WEAPON",
-          index: index,
-        });
+        const type = evt.target.dataset.type;
+        if (type === "weapon") {
+          this._send({
+            type: "PICKUP_WEAPON",
+            index: index,
+          });
+        } else {
+          this._send({
+            type: "PICKUP_ITEM",
+            index: index,
+            //payload: JSON.parse(evt.target.dataset.payload),
+          });
+        }
+
         this.remove();
       });
     });

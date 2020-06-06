@@ -22,10 +22,6 @@ const service = interpret(extendedMachine, { devTools: true }).onTransition(
     console.groupCollapsed("logger");
     console.log(state.value);
     console.log(state.context);
-    console.log(
-      state.context.players[0].weapons[0],
-      state.context.players[1].weapons[0]
-    );
     console.log(state);
     console.groupEnd();
     render(state);
@@ -47,6 +43,7 @@ function firstPaint(initialContext) {
     p.setAttribute("dex", player.attributes.dex);
 
     p.weapons = player.weapons;
+    p.items = player.items;
     document.querySelector("#players").appendChild(p);
   });
 
@@ -74,6 +71,8 @@ function render(state) {
     player.dex = state.context.players[index].attributes.dex;
     player.con = state.context.players[index].attributes.con;
     player.level = state.context.players[index].level;
+    player.weapons = state.context.players[index].weapons;
+    player.items = state.context.players[index].items;
     if (index === state.context.currentPlayer) {
       player.active = true;
     } else {

@@ -1,8 +1,9 @@
 import { assign } from "xstate";
-import { setupMonster } from "../monsters";
+import { setupMonster } from "../entities/monsters";
 
+import { rndBetween } from "../utils";
 import { observer } from "../observer";
-const methods = {
+export const actions = {
   awardXP: assign({
     //TODO: xp kunne være summen af opponents stats?
     players: (ctx, evt) => {
@@ -27,9 +28,7 @@ const methods = {
       if (roll <= hitChance) {
         const minDamage = players[context.currentPlayer].weapons[0].damageMin;
         const maxDamage = players[context.currentPlayer].weapons[0].damageMax;
-        let damage = Math.floor(
-          Math.random() * (maxDamage - minDamage + 1) + minDamage
-        );
+        let damage = rndBetween(minDamage, maxDamage);
         const modifier = Math.floor(
           (players[context.currentPlayer].attributes.str - 10) / 2
         );
@@ -121,7 +120,68 @@ const methods = {
       return players;
     },
   }),
+  dropItem: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      players[0].items.splice(Number(evt.index), 1);
+      return players;
+    },
+  }),
+  pickUpItem: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      const index = Number(evt.index);
+      observer.publish(
+        "LOG",
+        `Player picked up a ${players[1].items[index].name}`
+      );
 
+      players[0].items.push(players[1].items[index]);
+      players[1].items.splice(index, 1);
+      return players;
+    },
+  }),
+  useItem: assign({
+    players: (ctx, evt) => {
+      //guard should make sure it's usable
+      const players = [...ctx.players];
+      const player = players[ctx.currentPlayer];
+      const index = Number(evt.index);
+      const item = player.items[index];
+
+      switch (item.actionPayload.type) {
+        case "ATTR_CHANGE":
+          if (item.actionPayload.duration === "permanent") {
+            switch (item.actionPayload.attr) {
+              case "hitpoints":
+                const [min, max] = item.actionPayload.change.split("-");
+                player.hitpoints += rndBetween(min, max);
+                if (player.hitpoints > player.attributes.con * 2) {
+                  player.hitpoints = player.attributes.con * 2;
+                }
+                break;
+              default:
+                player.attributes[item.actionPayload.attr] += Number(
+                  item.actionPayload.change
+                );
+            }
+          } else {
+            //temporary boost
+          }
+          break;
+      }
+      /*
+    actionPayload: {
+      type: "ATTR_CHANGE",
+      duration: "permanent",
+      attr: "hitpoints",
+      change: "1-8",
+    },
+        */
+      player.items.splice(index, 1);
+      return players;
+    },
+  }),
   justLogIt: (ctx, evt, { action }) => {
     console.log(action);
     console.log("logging it", ctx, evt);
@@ -135,7 +195,7 @@ function getNextPlayer(ctx) {
   }
   return nextPlayer;
 }
-export const {
+/*export const {
   awardXP,
   switchPlayer,
   dealDamage,
@@ -146,4 +206,4 @@ export const {
   pickUpWeapon,
   dropWeapon,
   justLogIt,
-} = methods;
+} = methods;*/

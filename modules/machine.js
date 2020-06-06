@@ -1,38 +1,18 @@
 import { Machine } from "xstate";
 import guards from "./machineparts/guards";
-import {
-  awardXP,
-  switchPlayer,
-  dealDamage,
-  switchWeapon,
-  applyNewStats,
-  setInitialStats,
-  createNewEnemy,
-  pickUpWeapon,
-  dropWeapon,
-  justLogIt,
-} from "./machineparts/actions";
-/*const dropStuff = assign({
-  players: (ctx, evt) => {
-    const players = [...ctx.players];
-    console.log(evt);
-    players[0].level++;
-    return players;
-  },
-}),*/
+import { actions } from "./machineparts/actions";
 
-import { setupMonster } from "./monsters";
+import { setupMonster } from "./entities/monsters";
 
-import { all as weapons } from "./weapons";
+import { all as weapons } from "./entities/weapons";
 
-//TODO: monster does not show weapons , create new monster component
+//TODO: create new monster component
 //TODO: healing?
 //TODO: store every x levels or pick where to go
 //TODO: potions
 //TODO: monster treasures
-//TODO: carry weight = strength?
 //TODO: auto combat? setinterval=>attack (+ level up?)
-
+//TODO: create character initially
 const RPGMachine = Machine(
   {
     initial: "idle",
@@ -47,11 +27,12 @@ const RPGMachine = Machine(
           AI: false,
           level: 1,
           attributes: {
-            str: 2,
+            str: 10,
             dex: 10,
             con: 10,
           },
-          weapons: [weapons.find((weapon) => weapon.name === "Knife")],
+          items: [],
+          weapons: [weapons.find((weapon) => weapon.name === "Debugger")],
         },
         setupMonster(),
       ],
@@ -74,10 +55,17 @@ const RPGMachine = Machine(
           ATTACK: "attacking",
           PARRY: "parrying",
           SWITCH_WEAPON: "switchWeapon",
+          USE_ITEM: [{ target: "useItem", cond: "hasItems" }],
         },
       },
       switchWeapon: {
         entry: ["switchWeapon"],
+        on: {
+          "": "waiting",
+        },
+      },
+      useItem: {
+        entry: ["useItem"],
         on: {
           "": "waiting",
         },
@@ -135,6 +123,14 @@ const RPGMachine = Machine(
             target: "",
             actions: ["dropWeapon"],
           },
+          PICKUP_ITEM: {
+            actions: ["pickUpItem"],
+            target: "",
+          },
+          DROP_ITEM: {
+            target: "",
+            actions: ["dropItem"],
+          },
           TELEPORT: "town",
           NEXT: "nextEnemy",
         },
@@ -150,18 +146,7 @@ const RPGMachine = Machine(
   },
   {
     guards,
-    actions: {
-      justLogIt,
-      createNewEnemy,
-      setInitialStats,
-      applyNewStats,
-      switchWeapon,
-      dealDamage,
-      switchPlayer,
-      pickUpWeapon,
-      dropWeapon,
-      awardXP,
-    },
+    actions,
   }
 );
 
