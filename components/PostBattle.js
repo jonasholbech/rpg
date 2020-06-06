@@ -65,7 +65,7 @@ export default class PostBattle extends HTMLElement {
         const index = evt.target.dataset.index;
         console.log(index);
         this._send({
-          type: "DROP",
+          type: "DROP_WEAPON",
           index: index,
         });
         this.remove();
@@ -76,7 +76,7 @@ export default class PostBattle extends HTMLElement {
         const index = evt.target.dataset.index;
         console.log(index);
         this._send({
-          type: "PICKUP",
+          type: "PICKUP_WEAPON",
           index: index,
         });
         this.remove();

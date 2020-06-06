@@ -99,14 +99,14 @@ const methods = {
       return players;
     },
   }),
-  dropStuff: assign({
+  dropWeapon: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
       players[0].weapons.splice(Number(evt.index), 1);
       return players;
     },
   }),
-  pickUpStuff: assign({
+  pickUpWeapon: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
       console.log(ctx.players[1], evt.index);
@@ -143,7 +143,7 @@ export const {
   applyNewStats,
   setInitialStats,
   createNewEnemy,
-  pickUpStuff,
-  dropStuff,
+  pickUpWeapon,
+  dropWeapon,
   justLogIt,
 } = methods;

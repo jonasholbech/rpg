@@ -1,7 +1,6 @@
 import { Machine } from "xstate";
 import guards from "./machineparts/guards";
 import {
-  dropStuff,
   awardXP,
   switchPlayer,
   dealDamage,
@@ -9,7 +8,8 @@ import {
   applyNewStats,
   setInitialStats,
   createNewEnemy,
-  pickUpStuff,
+  pickUpWeapon,
+  dropWeapon,
   justLogIt,
 } from "./machineparts/actions";
 /*const dropStuff = assign({
@@ -126,15 +126,14 @@ const RPGMachine = Machine(
         },
       },
       postBattle: {
-        //entry: "pickupTreasures",
         on: {
-          PICKUP: {
-            actions: ["pickUpStuff"],
+          PICKUP_WEAPON: {
+            actions: ["pickUpWeapon"],
             target: "",
           },
-          DROP: {
+          DROP_WEAPON: {
             target: "",
-            actions: ["dropStuff"],
+            actions: ["dropWeapon"],
           },
           TELEPORT: "town",
           NEXT: "nextEnemy",
@@ -159,8 +158,8 @@ const RPGMachine = Machine(
       switchWeapon,
       dealDamage,
       switchPlayer,
-      pickUpStuff,
-      dropStuff,
+      pickUpWeapon,
+      dropWeapon,
       awardXP,
     },
   }
