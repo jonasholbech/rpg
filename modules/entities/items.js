@@ -1,6 +1,5 @@
 import { rndBetween } from "../utils";
 export const items = [
-  //TODO: stackable (Infinity)
   //TODO: change should be an integer
   //amount is the split with an interval
   {
@@ -10,7 +9,6 @@ export const items = [
       type: "ATTR_CHANGE",
       duration: "permanent",
       attr: "hitpoints",
-
       change: "1-8",
     },
   },

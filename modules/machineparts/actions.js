@@ -77,7 +77,7 @@ export const actions = {
       players[ctx.currentPlayer].level++;
       players[ctx.currentPlayer].xp = 0; //TODO: der kunne være leftover xp
       players[ctx.currentPlayer].hitpoints =
-        getAttributeWithBonuses(players[context.currentPlayer], "con") * 2; //TODO: når con potion ophører skal hp ned til ny max
+        getAttributeWithBonuses(players[ctx.currentPlayer], "con") * 2; //TODO: når con potion ophører skal hp ned til ny max
       return players;
     },
   }),
@@ -154,7 +154,16 @@ export const actions = {
         `Player picked up a ${players[1].items[index].name}`
       );
 
-      players[0].items.push(players[1].items[index]);
+      switch (players[1].items[index].name) {
+        case "Gold":
+          const [min, max] = players[1].items[index].amount.split("-");
+          const gold = rndBetween(min, max);
+          players[0].gold += gold;
+          break;
+        default:
+          players[0].items.push(players[1].items[index]);
+      }
+
       players[1].items.splice(index, 1);
       return players;
     },

@@ -36,6 +36,7 @@ export function setupMonster() {
   const monster = monsters[Math.floor(Math.random() * monsters.length)];
   monster.weapons = [rndWeaponForLevel(monster.level)];
   monster.bonuses = [];
+  monster.gold = 0; //TODO: gold er i items for monstre
   monster.hitpoints = getAttributeWithBonuses(monster, "con") * 2;
   monster.AI = true;
   monster.items = getRndItems();
