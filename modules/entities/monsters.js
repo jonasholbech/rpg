@@ -1,4 +1,5 @@
 import { rndWeaponForLevel } from "./weapons";
+import { getAttributeWithBonuses } from "../utils";
 import { getRndItems } from "./items";
 export const monsters = [
   {
@@ -34,8 +35,10 @@ export const monsters = [
 export function setupMonster() {
   const monster = monsters[Math.floor(Math.random() * monsters.length)];
   monster.weapons = [rndWeaponForLevel(monster.level)];
-  monster.hitpoints = monster.attributes.con * 2;
+  monster.bonuses = [];
+  monster.hitpoints = getAttributeWithBonuses(monster, "con") * 2;
   monster.AI = true;
   monster.items = getRndItems();
+
   return monster;
 }

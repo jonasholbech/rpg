@@ -1,8 +1,4 @@
 export default class InterpreterComponent extends HTMLElement {
-  constructor() {
-    super();
-    //console.log("constructor");
-  }
   set nextEvents(value) {
     //console.log("setting events in the component");
     this._events = value;

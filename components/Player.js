@@ -1,3 +1,4 @@
+import { getAttributeBonuses } from "../modules/utils";
 export default class Player extends HTMLElement {
   constructor() {
     super();
@@ -56,7 +57,6 @@ export default class Player extends HTMLElement {
     this._render();
   }
   _render() {
-    //console.log("render");
     this._renderCount++;
     this.innerHTML = `
       <header>
@@ -75,11 +75,17 @@ export default class Player extends HTMLElement {
       <div class="attributes">
           <dl>
               <dt>STR</dt>
-              <dd class="str">${this.getAttribute("str")}</dd>
+              <dd class="str">${this.getAttribute("str")} (+${
+      this._state.bonuses ? getAttributeBonuses(this._state, "str") : 0
+    })</dd>
               <dt>DEX</dt>
-              <dd class="dex">${this.getAttribute("dex")}</dd>
+              <dd class="dex">${this.getAttribute("dex")} (+${
+      this._state.bonuses ? getAttributeBonuses(this._state, "dex") : 0
+    })</dd>
               <dt>CON</dt>
-              <dd class="con">${this.getAttribute("con")}</dd>
+              <dd class="con">${this.getAttribute("con")} (+${
+      this._state.bonuses ? getAttributeBonuses(this._state, "con") : 0
+    })</dd>
           </dl>
       </div>
       <div class="weapons">

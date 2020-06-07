@@ -1,7 +1,7 @@
 import { assign } from "xstate";
 import { setupMonster } from "../entities/monsters";
 
-import { rndBetween } from "../utils";
+import { rndBetween, getAttributeWithBonuses } from "../utils";
 import { observer } from "../observer";
 export const actions = {
   awardXP: assign({
@@ -23,14 +23,18 @@ export const actions = {
       let nextPlayer = getNextPlayer(context);
       const currentPlayer = players[context.currentPlayer];
       const hitChance =
-        75 + currentPlayer.attributes.dex - players[nextPlayer].attributes.dex;
+        75 +
+        getAttributeWithBonuses(currentPlayer, "dex") -
+        getAttributeWithBonuses(players[nextPlayer], "dex");
       const roll = Math.random() * 100;
       if (roll <= hitChance) {
         const minDamage = players[context.currentPlayer].weapons[0].damageMin;
         const maxDamage = players[context.currentPlayer].weapons[0].damageMax;
         let damage = rndBetween(minDamage, maxDamage);
         const modifier = Math.floor(
-          (players[context.currentPlayer].attributes.str - 10) / 2
+          (getAttributeWithBonuses(players[context.currentPlayer], "str") -
+            10) /
+            2
         );
         damage += modifier;
         if (damage < 1) {
@@ -73,7 +77,7 @@ export const actions = {
       players[ctx.currentPlayer].level++;
       players[ctx.currentPlayer].xp = 0; //TODO: der kunne være leftover xp
       players[ctx.currentPlayer].hitpoints =
-        players[ctx.currentPlayer].attributes.con * 2;
+        getAttributeWithBonuses(players[context.currentPlayer], "con") * 2; //TODO: når con potion ophører skal hp ned til ny max
       return players;
     },
   }),
@@ -81,7 +85,7 @@ export const actions = {
     players: (ctx, evt) => {
       const players = [...ctx.players];
       players.forEach((pl) => {
-        pl.hitpoints = pl.attributes.con * 2;
+        pl.hitpoints = getAttributeWithBonuses(pl, "con") * 2;
       });
       return players;
     },
@@ -117,6 +121,20 @@ export const actions = {
 
       players[0].weapons.push(players[1].weapons[index]);
       players[1].weapons.splice(index, 1);
+      return players;
+    },
+  }),
+  removeBonuses: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      const bonuses = players[ctx.currentPlayer].bonuses;
+      const modifiedBonuses = bonuses.map((b) => {
+        b.duration--;
+        return b;
+      });
+      players[ctx.currentPlayer].bonuses = modifiedBonuses.filter(
+        (b) => b.duration > 0
+      );
       return players;
     },
   }),
@@ -156,8 +174,12 @@ export const actions = {
               case "hitpoints":
                 const [min, max] = item.actionPayload.change.split("-");
                 player.hitpoints += rndBetween(min, max);
-                if (player.hitpoints > player.attributes.con * 2) {
-                  player.hitpoints = player.attributes.con * 2;
+                if (
+                  player.hitpoints >
+                  getAttributeWithBonuses(players, "con") * 2
+                ) {
+                  player.hitpoints =
+                    getAttributeWithBonuses(players, "con") * 2;
                 }
                 break;
               default:
@@ -166,9 +188,14 @@ export const actions = {
                 );
             }
           } else {
+            player.bonuses.push(item.actionPayload);
             //temporary boost
           }
           break;
+        /*
+          { attribute: "str", amount: 20, duration: 1 },
+            { attribute: "dex", amount: 20, duration: 10 },
+          */
       }
       /*
     actionPayload: {
@@ -195,15 +222,3 @@ function getNextPlayer(ctx) {
   }
   return nextPlayer;
 }
-/*export const {
-  awardXP,
-  switchPlayer,
-  dealDamage,
-  switchWeapon,
-  applyNewStats,
-  setInitialStats,
-  createNewEnemy,
-  pickUpWeapon,
-  dropWeapon,
-  justLogIt,
-} = methods;*/

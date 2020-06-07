@@ -1,6 +1,8 @@
 import { rndBetween } from "../utils";
 export const items = [
   //TODO: stackable (Infinity)
+  //TODO: change should be an integer
+  //amount is the split with an interval
   {
     name: "Healing Potion",
     usable: true,
@@ -8,6 +10,7 @@ export const items = [
       type: "ATTR_CHANGE",
       duration: "permanent",
       attr: "hitpoints",
+
       change: "1-8",
     },
   },
@@ -16,9 +19,29 @@ export const items = [
     usable: true,
     actionPayload: {
       type: "ATTR_CHANGE",
-      duration: "combat",
+      duration: 1,
       attr: "str",
-      change: "10",
+      change: 10,
+    },
+  },
+  {
+    name: "Dexterity Potion",
+    usable: true,
+    actionPayload: {
+      type: "ATTR_CHANGE",
+      duration: 1,
+      attr: "dex",
+      change: 10,
+    },
+  },
+  {
+    name: "Constitution Potion",
+    usable: true,
+    actionPayload: {
+      type: "ATTR_CHANGE",
+      duration: 1,
+      attr: "con",
+      change: 10,
     },
   },
   {

@@ -32,6 +32,11 @@ const RPGMachine = Machine(
             con: 10,
           },
           items: [],
+          bonuses: [
+            { attr: "str", change: 20, duration: 1 },
+            { attr: "dex", change: 20, duration: 10 },
+            { attr: "con", change: 20, duration: 10 },
+          ],
           weapons: [weapons.find((weapon) => weapon.name === "Debugger")],
         },
         setupMonster(),
@@ -95,7 +100,7 @@ const RPGMachine = Machine(
         },
       },
       playerWon: {
-        entry: ["awardXP"],
+        entry: ["awardXP", "removeBonuses"],
         on: {
           "": [
             { target: "levelUp", cond: "checkLevelUp" },

@@ -22,6 +22,7 @@ const service = interpret(extendedMachine, { devTools: true }).onTransition(
     console.groupCollapsed("logger");
     console.log(state.value);
     console.log(state.context);
+    console.table(state.context.players[0].bonuses);
     console.log(state);
     console.groupEnd();
     render(state);
