@@ -45,6 +45,7 @@ export const monsters = [
         damageMin: 1,
         damageMax: 20,
         minLevel: 1,
+        notCollectable: true,
       },
     ],
   },

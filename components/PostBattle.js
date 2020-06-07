@@ -52,12 +52,15 @@ export default class PostBattle extends HTMLElement {
   }
   _setWeaponsMonster() {
     let data = "";
-    const disabled =
+    let disabled =
       this._state.context.players[0].attributes.str >
       this._state.context.players[0].weapons.length
         ? ""
         : "disabled";
     this._state.context.players[1].weapons.forEach((w, i) => {
+      if (w.hasOwnProperty("notCollectable")) {
+        disabled = "disabled";
+      }
       data += `<li><button ${disabled} data-type="weapon" data-index="${i}">Take</button> ${w.name} (${w.damageMin}-${w.damageMax})</li>`;
     });
     return data;
