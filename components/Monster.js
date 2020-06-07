@@ -3,7 +3,6 @@ import { observer } from "../modules/observer";
 export default class Monster extends HTMLElement {
   constructor() {
     super();
-    this._renderCount = 0;
     this._observer = observer;
     this._update = this._update.bind(this);
     this._observer.subscribe("MONSTER_CONTEXT", this._update);
@@ -25,6 +24,7 @@ export default class Monster extends HTMLElement {
     this._initialRender();
   }
   _newMonster(ctx) {
+    //TODO: i tvivl om det her er helt ok, skulle den bare køre hver gang?
     console.log("new monster");
     this._updateWeaponList(ctx.weapons);
     this._updateItemsList(ctx.items);
@@ -42,7 +42,7 @@ export default class Monster extends HTMLElement {
   }
   _getNodes() {
     this._nodes = {
-      h1: this.querySelector("h1 span"),
+      h1: this.querySelector("h1"),
       img: this.querySelector("img"),
       hp: this.querySelector(".hp"),
       str: this.querySelector(".str span"),
@@ -56,10 +56,9 @@ export default class Monster extends HTMLElement {
     };
   }
   _initialRender() {
-    this._renderCount++;
     this.innerHTML = `
       <header>
-          <h1><span>TODO NAME</span> ${this._renderCount}</h1>
+          <h1>TODO NAME</h1>
           <img src="https://avatars.dicebear.com/v2/bottts/TODO NAME.svg" />
           <div class="hp">TODO HP</div>
       </header>
