@@ -1,41 +1,18 @@
 import { Machine } from "xstate";
 import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
-
-import { setupMonster } from "./entities/monsters";
-
-import { all as weapons } from "./entities/weapons";
+import initialContext from "./machineparts/initialContext";
 
 //TODO: create new monster component
 //TODO: store every x levels or pick where to go
 //TODO: auto combat? setinterval=>attack (+ level up?)
 //TODO: create character initially
+//TODO: negative bonuses, poison (throwable on opponent, or through weapon (bite))
 const RPGMachine = Machine(
   {
     initial: "idle",
     strict: true,
-    context: {
-      currentPlayer: -1,
-      players: [
-        {
-          name: "Lord Holle",
-          hitpoints: 10,
-          xp: 0,
-          AI: false,
-          level: 1,
-          gold: 0,
-          attributes: {
-            str: 10,
-            dex: 10,
-            con: 10,
-          },
-          items: [],
-          bonuses: [],
-          weapons: [weapons.find((weapon) => weapon.name === "Knife")],
-        },
-        setupMonster(),
-      ],
-    },
+    context: { ...initialContext },
     states: {
       idle: {
         entry: ["setInitialStats", "createNewEnemy"],
@@ -88,7 +65,7 @@ const RPGMachine = Machine(
         },
       },
       parrying: {
-        //TODO:
+        //TODO: curse (bonus) on opponent, -50 on attack (dex)?
         on: {
           "": "nextPlayer",
         },
@@ -102,7 +79,14 @@ const RPGMachine = Machine(
           ],
         },
       },
-      playerDied: {}, //TODO:
+      playerDied: {
+        on: {
+          PLAY_AGAIN: {
+            actions: ["reset"],
+            target: "idle",
+          },
+        },
+      }, //TODO:
       levelUp: {
         entry: [{ type: "justLogIt", payload: "Player leveled up" }],
         on: {

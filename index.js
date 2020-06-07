@@ -2,12 +2,13 @@ import { Machine, interpret } from "xstate";
 //import is from "is_js";
 import RPGMachine from "./modules/machine";
 
+import { observer } from "./modules/observer";
 import Player from "./components/Player";
 import InterpreterComponent from "./components/InterpreterComponent";
 import LevelUp from "./components/LevelUp";
 import Logger from "./components/Logger";
 import PostBattle from "./components/PostBattle";
-
+//import Monster from "./components/Monster"
 const extendedMachine = RPGMachine.withConfig({
   /*actions: {
     UIclearForm: clearForm(),

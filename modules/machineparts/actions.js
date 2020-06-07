@@ -1,8 +1,9 @@
 import { assign } from "xstate";
 import { setupMonster } from "../entities/monsters";
-
+import initialContext from "./initialContext";
 import { rndBetween, getAttributeWithBonuses } from "../utils";
 import { observer } from "../observer";
+import { all as weapons } from "../entities/weapons";
 export const actions = {
   awardXP: assign({
     //TODO: xp kunne være summen af opponents stats?
@@ -10,6 +11,34 @@ export const actions = {
       const players = [...ctx.players];
       players[ctx.currentPlayer].xp += 100;
       return players;
+    },
+  }),
+  reset: assign({
+    players: (ctx) => {
+      //using initialContext messses stuff up (xp and stuff is kept)
+      const players = [
+        {
+          name: "Lord Holle",
+          hitpoints: 10,
+          xp: 0,
+          AI: false,
+          level: 1,
+          gold: 0,
+          attributes: {
+            str: 10,
+            dex: 10,
+            con: 10,
+          },
+          items: [],
+          bonuses: [],
+          weapons: [weapons.find((weapon) => weapon.name === "Knife")],
+        },
+        setupMonster(),
+      ];
+      return players;
+    },
+    currentPlayer: (ctx) => {
+      return initialContext.currentPlayer;
     },
   }),
   switchPlayer: assign({
@@ -94,7 +123,6 @@ export const actions = {
     players: (ctx) => {
       const players = [...ctx.players];
       players[1] = setupMonster(); //TODO: index hardcodet, should it be?
-      console.log(observer);
       observer.publish(
         "LOG",
         `A new enemy appears, a mighty ${players[1].name} (level ${players[1].level})`

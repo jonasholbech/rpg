@@ -81,11 +81,9 @@ export const items = [
 
 export function getRndItems(min = 0, max = 2) {
   const amount = rndBetween(min, max);
-  console.log(amount, items);
   let response = [];
   for (let i = 0; i < amount; i++) {
     response.push(items[Math.floor(Math.random() * items.length)]);
   }
-  console.log(amount, items, response);
   return response;
 }
