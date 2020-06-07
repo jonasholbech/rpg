@@ -185,10 +185,9 @@ export const actions = {
                 player.hitpoints += rndBetween(min, max);
                 if (
                   player.hitpoints >
-                  getAttributeWithBonuses(players, "con") * 2
+                  getAttributeWithBonuses(player, "con") * 2
                 ) {
-                  player.hitpoints =
-                    getAttributeWithBonuses(players, "con") * 2;
+                  player.hitpoints = getAttributeWithBonuses(player, "con") * 2;
                 }
                 break;
               default:

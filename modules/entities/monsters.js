@@ -4,7 +4,6 @@ import { getRndItems } from "./items";
 export const monsters = [
   {
     name: "Snotling",
-    AI: true,
     level: 1,
     attributes: {
       str: 2,
@@ -14,7 +13,6 @@ export const monsters = [
   },
   {
     name: "Snot-Pack",
-    AI: true,
     level: 1,
     attributes: {
       str: 2,
@@ -29,6 +27,24 @@ export const monsters = [
       str: 4,
       dex: 7,
       con: 4,
+    },
+  },
+  {
+    name: "Dinosaur Monster",
+    level: 1,
+    attributes: {
+      str: 20,
+      dex: 7,
+      con: 20,
+    },
+  },
+  {
+    name: "møg unge",
+    level: 1,
+    attributes: {
+      str: 1,
+      dex: 50,
+      con: 5,
     },
   },
 ];

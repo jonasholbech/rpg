@@ -18,11 +18,23 @@ export const all = [
     minLevel: 1,
   },
   {
+    name: "Short Sword",
+    damageMin: 1,
+    damageMax: 6,
+    minLevel: 1,
+  },
+  {
+    name: "Sword",
+    damageMin: 1,
+    damageMax: 8,
+    minLevel: 1,
+  },
+  /*{
     name: "Debugger",
     damageMin: 20,
     damageMax: 20,
     minLevel: 20,
-  },
+  },*/
 ];
 export function rndWeaponForLevel(lvl) {
   const filtered = all.filter((weapon) => weapon.minLevel <= lvl);
