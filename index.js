@@ -8,15 +8,8 @@ import InterpreterComponent from "./components/InterpreterComponent";
 import LevelUp from "./components/LevelUp";
 import Logger from "./components/Logger";
 import PostBattle from "./components/PostBattle";
-//import Monster from "./components/Monster"
-const extendedMachine = RPGMachine.withConfig({
-  /*actions: {
-    UIclearForm: clearForm(),
-    UIonChange: (ctx, evt) => {
-      console.log("my change", ctx, evt);
-    },
-  },*/
-});
+import Monster from "./components/Monster";
+const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(
   (state) => {
@@ -26,6 +19,7 @@ const service = interpret(extendedMachine, { devTools: true }).onTransition(
     console.table(state.context.players[0].bonuses);
     console.log(state);
     console.groupEnd();
+    observer.publish("MONSTER_CONTEXT", state.context.players[1]);
     render(state);
   }
 );
@@ -34,25 +28,29 @@ window.service = service;
 
 function firstPaint(initialContext) {
   console.log("First Paint");
-  initialContext.players.forEach((player, index) => {
-    const p = document.createElement("rpg-player");
-    p.setAttribute("name", player.name);
-    p.setAttribute("index", index);
-    p.setAttribute("hitpoints", player.hitpoints);
-    p.xp = player.xp;
-    p.str = player.attributes.str;
-    p.setAttribute("con", player.attributes.con);
-    p.setAttribute("dex", player.attributes.dex);
+  //initialContext.players.forEach((player, index) => {
+  let player = initialContext.players[0];
+  const p = document.createElement("rpg-player");
+  p.setAttribute("name", player.name);
+  p.setAttribute("index", 0);
+  p.setAttribute("hitpoints", player.hitpoints);
+  p.xp = player.xp;
+  p.str = player.attributes.str;
+  p.setAttribute("con", player.attributes.con);
+  p.setAttribute("dex", player.attributes.dex);
 
-    p.weapons = player.weapons;
-    p.items = player.items;
-    document.querySelector("#players").appendChild(p);
-  });
+  p.weapons = player.weapons;
+  p.items = player.items;
+  document.querySelector("#players").appendChild(p);
+  //});
+  const monster = document.createElement("rpg-monster");
+  document.querySelector("#players").appendChild(monster);
 
   setTimeout(() => {
     document.querySelector("rpg-interpreter").service = service;
     document.querySelector("rpg-interpreter").state = {}; //TODO: initialstate
     document.querySelectorAll("rpg-player").forEach((player, index) => {
+      //TODO: forEach not needed, only one
       player.service = service;
     });
     service.start();

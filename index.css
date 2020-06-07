@@ -8,21 +8,26 @@ main {
 #players {
   display: flex;
 }
-rpg-player {
+rpg-player,
+rpg-monster {
   border: 1px solid #000;
   min-width: 300px;
 }
-rpg-player header {
+rpg-player header,
+rpg-monster header {
   position: relative;
 }
 rpg-player header h1,
+rpg-monster header h1,
 rpg-player header .hp,
+rpg-monster header .hp,
 rpg-player header .xp {
   position: absolute;
   z-index: 1;
   margin: 0;
 }
-rpg-player header .hp {
+rpg-player header .hp,
+rpg-monster header .hp {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -40,27 +45,34 @@ rpg-player header .xp {
   transform-origin: left;
   transition: 1s transform;
 }
-rpg-player img {
+rpg-player img,
+rpg-monster img {
   width: 100%;
   height: auto;
 }
 
-rpg-player .attributes {
+rpg-player .attributes,
+rpg-monster .attributes {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 1rem;
   gap: 0.5rem;
 }
-rpg-player dl {
+rpg-player dl,
+rpg-monster dl {
   display: contents;
 }
 rpg-player dl,
+rpg-monster dl,
 rpg-player dt,
-rpg-player dd {
+rpg-monster dt,
+rpg-player dd,
+rpg-monster dd {
   margin: 0;
   padding: 0;
 }
-rpg-player ol {
+rpg-player ol,
+rpg-monster ol {
   list-style-type: none;
   padding: 0.5rem;
 }
@@ -75,11 +87,13 @@ rpg-postbattle {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 rpg-levelup section,
 rpg-postbattle section {
   background: white;
   padding: 2rem;
+  z-index: 3;
 }
 rpg-postbattle section {
   display: grid;

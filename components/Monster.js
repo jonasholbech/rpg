@@ -1,47 +1,77 @@
 import { getAttributeBonuses } from "../modules/utils";
+import { observer } from "../modules/observer";
 export default class Monster extends HTMLElement {
   constructor() {
     super();
     this._renderCount = 0;
-    this._monster = {};
-  }
-  set observer(observer) {
     this._observer = observer;
+    this._update = this._update.bind(this);
+    this._observer.subscribe("MONSTER_CONTEXT", this._update);
+    this._nodes;
+    this._prevHitpoints = 0;
   }
 
-  connectedCallback() {
-    this._render();
+  _update(ctx) {
+    if (!this._nodes) {
+      this._getNodes();
+    }
+    if (ctx.hitpoints > this._prevHitpoints) {
+      this._newMonster(ctx);
+    }
+    this._prevHitpoints = ctx.hitpoints;
+    this._updateParts(ctx);
   }
-  _render() {
+  connectedCallback() {
+    this._initialRender();
+  }
+  _newMonster(ctx) {
+    console.log("new monster");
+    this._updateWeaponList(ctx.weapons);
+    this._updateItemsList(ctx.items);
+  }
+  _updateParts(ctx) {
+    this._nodes.h1.textContent = ctx.name;
+    this._nodes.img.src = `https://avatars.dicebear.com/v2/bottts/${ctx.name}.svg`;
+    this._nodes.hp.textContent = ctx.hitpoints;
+    this._nodes.str.textContent = ctx.attributes.str;
+    this._nodes.strBonus.textContent = 0;
+    this._nodes.dex.textContent = ctx.attributes.dex;
+    this._nodes.dexBonus.textContent = 0;
+    this._nodes.con.textContent = ctx.attributes.con;
+    this._nodes.conBonus.textContent = 0;
+  }
+  _getNodes() {
+    this._nodes = {
+      h1: this.querySelector("h1 span"),
+      img: this.querySelector("img"),
+      hp: this.querySelector(".hp"),
+      str: this.querySelector(".str span"),
+      strBonus: this.querySelector(".str span:last-child"),
+      dex: this.querySelector(".dex span"),
+      dexBonus: this.querySelector(".dex span:last-child"),
+      con: this.querySelector(".con span"),
+      conBonus: this.querySelector(".con span:last-child"),
+      weapons: this.querySelector(".weapons ol"),
+      items: this.querySelector(".items ol"),
+    };
+  }
+  _initialRender() {
     this._renderCount++;
     this.innerHTML = `
       <header>
-          <h1>${this._state.name} ${this._renderCount}</h1>
-          <img src="https://avatars.dicebear.com/v2/bottts/${this.getAttribute(
-            "name"
-          )}.svg" />
-          <div class="xp" style="transform:scaleX(${
-            (this.getAttribute("xp") /
-              (Number(this.getAttribute("level")) * 1000)) *
-            100
-          }%)"></div>
-          <div class="hp">${this.getAttribute("hitpoints")}</div>
+          <h1><span>TODO NAME</span> ${this._renderCount}</h1>
+          <img src="https://avatars.dicebear.com/v2/bottts/TODO NAME.svg" />
+          <div class="hp">TODO HP</div>
       </header>
       <div class="actions"></div>
       <div class="attributes">
           <dl>
               <dt>STR</dt>
-              <dd class="str">${this.getAttribute("str")} (+${
-      this._state.bonuses ? getAttributeBonuses(this._state, "str") : 0
-    })</dd>
+              <dd class="str"><span>TODO STR</span> (+<span>TODO BONUS</span>)</dd>
               <dt>DEX</dt>
-              <dd class="dex">${this.getAttribute("dex")} (+${
-      this._state.bonuses ? getAttributeBonuses(this._state, "dex") : 0
-    })</dd>
+              <dd class="dex"><span>TODO DEX</span> (+<span>TODO BONUS</span>)</dd>
               <dt>CON</dt>
-              <dd class="con">${this.getAttribute("con")} (+${
-      this._state.bonuses ? getAttributeBonuses(this._state, "con") : 0
-    })</dd>
+              <dd class="con"><span>TODO CON</span> (+<span>TODO BONUS</span>)</dd>
           </dl>
       </div>
       <div class="weapons">
@@ -49,100 +79,27 @@ export default class Monster extends HTMLElement {
       </div>
       <div class="items">
           <ol></ol>  
-      </div>
-  `;
-    this._updateWeaponList();
-    this._updateItemsList();
-    this._setActions();
+      </div>`;
   }
-  _setActions() {
-    if (!this.active) {
-      this.querySelector(".actions").innerHTML = "";
-    } else if (this._nextEvents && this.active) {
-      //this.querySelector(".actions").innerHTML = ;
-      this._nextEvents.forEach((ev) => {
-        if (["ATTACK", "PARRY"].includes(ev)) {
-          const b = document.createElement("button");
-          b.textContent = ev;
-          b.dataset.event = ev;
-          b.onclick = () => {
-            this._service.send(ev);
-          };
-          this.querySelector(".actions").appendChild(b);
-        }
-      });
-    }
-  }
-  _updateItemsList() {
-    if (this._items) {
-      const list = this.querySelector(".items ol");
-      list.innerHTML = "";
-      this._items.forEach((w, i) => {
-        const li = document.createElement("li");
-        const span = document.createElement("span");
-        let b;
-        if (w.usable) {
-          b = document.createElement("button");
-          b.textContent = "Use";
-          b.addEventListener("click", (e) => {
-            this._use_item(i);
-          });
-        }
-        span.textContent = `${w.name}`;
-
-        if (b) {
-          li.appendChild(b);
-        }
-
-        li.appendChild(span);
-        list.appendChild(li);
-      });
-    }
-  }
-  _updateWeaponList() {
-    if (this._weapons) {
-      const list = this.querySelector(".weapons ol");
-      list.innerHTML = "";
-      this._weapons.forEach((w, i) => {
-        const li = document.createElement("li");
-        const span = document.createElement("span");
-
-        const b = document.createElement("button");
-        b.textContent = "Activate";
-        span.textContent = `${w.name} (${w.damageMin}-${w.damageMax})`;
-        b.addEventListener("click", (e) => {
-          this._switch(i);
-        });
-        b.disabled = true;
-        if (
-          this.active &&
-          this._nextEvents &&
-          this._nextEvents.includes("SWITCH_WEAPON")
-        ) {
-          b.disabled = false;
-        }
-        li.appendChild(b);
-        li.appendChild(span);
-        list.appendChild(li);
-
-        /*weaponList.push(
-          `<li><button onclick="this._switch(${i})">Activate</button>${w.name} (${w.damageMin}-${w.damageMax})</li>`
-        );*/
-      });
-      //list.innerHTML = weaponList.join("\n");
-    }
-  }
-  _switch(index) {
-    this._service.send({
-      type: "SWITCH_WEAPON",
-      index: index,
+  _updateItemsList(items) {
+    this._nodes.items.innerHTML = "";
+    items.forEach((w, i) => {
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = `${w.name}`;
+      li.appendChild(span);
+      this._nodes.items.appendChild(li);
     });
   }
-  _use_item(index) {
-    this._service.send({
-      type: "USE_ITEM",
-      index: index,
+  _updateWeaponList(weapons) {
+    this._nodes.weapons.innerHTML = "";
+    weapons.forEach((w, i) => {
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = `${w.name} (${w.damageMin} - ${w.damageMax})`;
+      li.appendChild(span);
+      this._nodes.weapons.appendChild(li);
     });
   }
 }
-customElements.define("rpg-player", Player);
+customElements.define("rpg-monster", Monster);
