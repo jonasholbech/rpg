@@ -7,10 +7,7 @@ import { setupMonster } from "./entities/monsters";
 import { all as weapons } from "./entities/weapons";
 
 //TODO: create new monster component
-//TODO: healing?
 //TODO: store every x levels or pick where to go
-//TODO: potions
-//TODO: monster treasures
 //TODO: auto combat? setinterval=>attack (+ level up?)
 //TODO: create character initially
 const RPGMachine = Machine(

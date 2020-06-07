@@ -129,8 +129,6 @@ export default class Player extends HTMLElement {
           b = document.createElement("button");
           b.textContent = "Use";
           b.addEventListener("click", (e) => {
-            //this._switch(i);
-            //console.log("//TODO:");
             this._use_item(i);
           });
         }
