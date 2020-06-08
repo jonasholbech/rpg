@@ -109,7 +109,8 @@ rpg-town section {
   padding: 2rem;
   z-index: 3;
 }
-rpg-postbattle section {
+rpg-postbattle section,
+rpg-healer .grid2 {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;

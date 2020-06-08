@@ -26,6 +26,16 @@ export const items = [
     },
   },
   {
+    name: "Constitution Potion",
+    usable: true,
+    actionPayload: {
+      type: "ATTR_CHANGE",
+      duration: 10,
+      attr: "con",
+      change: 10,
+    },
+  },
+  {
     name: "Dexterity Potion",
     usable: true,
     actionPayload: {

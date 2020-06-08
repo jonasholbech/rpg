@@ -119,6 +119,15 @@ export const actions = {
       return players;
     },
   }),
+  heal: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      console.log(evt);
+      players[0].hitpoints = getAttributeWithBonuses(players[0], "con") * 2;
+      players[0].gold -= evt.price;
+      return players;
+    },
+  }),
   createNewEnemy: assign({
     players: (ctx) => {
       const players = [...ctx.players];

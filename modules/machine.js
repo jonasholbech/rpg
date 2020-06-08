@@ -10,7 +10,7 @@ import initialContext from "./machineparts/initialContext";
 //Spells are earned or picked up?
 const RPGMachine = Machine(
   {
-    initial: "idle",
+    initial: "town",
     strict: true,
     context: { ...initialContext },
     states: {
@@ -138,15 +138,15 @@ const RPGMachine = Machine(
           healer: {
             on: {
               HEAL: {
-                target: "",
+                target: "healer",
                 actions: "heal",
               },
               SELL_ITEM: {
-                target: "",
+                target: "healer",
                 actions: "sellItem",
               },
               BUY_ITEM: {
-                target: "",
+                target: "healer",
                 actions: "buyItem",
               },
             },

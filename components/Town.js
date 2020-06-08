@@ -23,25 +23,32 @@ export default class Town extends HTMLElement {
     console.log("first render of town");
     this.innerHTML = `
     <section>
-      <h1>Town</h1>
+      <h1>Town, <span>${this._state.context.players[0].gold}</span>gcs</h1>
       <nav><button data-event="VISIT_HEALER">Healer</button><button data-event="VISIT_BLACKSMITH">Blacksmith</button><button  data-event="LEAVE">Leave</button></nav>
       <div class="merchants">
         
       </div>
     </section>`;
-
-    if (this._state.matches("town.healer")) {
-      const healer = document.createElement("rpg-healer");
-      healer.state = this._state;
-      healer.send = this._send;
-      this.querySelector(".merchants").appendChild(healer);
-    }
-    this.querySelectorAll(`button[data-event]`).forEach((btn) => {
+    this.nodes = {
+      gold: this.querySelector("h1 span"),
+      merchants: this.querySelector(".merchants"),
+    };
+    this.querySelectorAll(`nav button[data-event]`).forEach((btn) => {
       btn.addEventListener("click", (e) => {
         this._send(e.target.dataset.event);
         this.remove();
       });
     });
+    this._setMerchant();
+  }
+  _setMerchant() {
+    this.nodes.merchants.innerHTML = "";
+    if (this._state.matches("town.healer")) {
+      const healer = document.createElement("rpg-healer");
+      healer.state = this._state;
+      healer.send = this._send;
+      this.nodes.merchants.appendChild(healer);
+    }
   }
   _update() {
     /* this.querySelector("#next").addEventListener("click", (e) => {
@@ -178,8 +185,16 @@ class Healer extends HTMLElement {
     this.innerHTML = `
         <h2>Healer</h2>
         <button data-event="HEAL">Heal (5gc)</button>
-        <ol class="sellItems"></ol>
-        <ol class="buyItems"></ol>
+        <div class="grid2">
+            <section>
+                <h3>Sell</h3>
+                <ol class="sellItems"></ol>
+            </section>
+            <section>
+                <h3>Buy</h3>
+                <ol class="buyItems"></ol>
+            </section>
+        </div>
         <button data-event="SELL_ITEM">Sell</button>
     `;
     this.nodes = {
@@ -187,7 +202,17 @@ class Healer extends HTMLElement {
       buyList: this.querySelector(".buyItems"),
       sellList: this.querySelector(".sellItems"),
     };
+    this._setPlayerSelling("items");
+    this._setMerchantSelling("items");
     this._update();
+    this.nodes.healBtn.addEventListener("click", (e) => {
+      this._send({
+        type: "HEAL",
+        price: 5,
+      });
+    });
   }
+  _setPlayerSelling(type) {}
+  _setMerchantSelling(type) {}
 }
 customElements.define("rpg-healer", Healer);
