@@ -58,7 +58,6 @@ firstPaint(extendedMachine.context);
 function render(state) {
   document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
   document.querySelector("rpg-interpreter").state = state;
-  //document.querySelector("rpg-player").str = Date.now();
   const player = document.querySelector("rpg-player");
   const index = 0;
   player.nextEvents = state.nextEvents;
