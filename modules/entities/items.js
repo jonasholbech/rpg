@@ -5,7 +5,6 @@ export const items = [
   //amount is the split with an interval
   //TODO: modify chances for each one
   //TODO: magic equipment (could just be a knife (1-4) that's a (2-5))
-  //TODO: items, monsters, weapons => uniqueID
   {
     name: "Healing Potion",
     usable: true,
