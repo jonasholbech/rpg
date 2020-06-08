@@ -1,7 +1,7 @@
 import { setupMonster } from "../entities/monsters";
-import { all as weapons } from "../entities/weapons";
+import { all as weapons, getPlayerStartingWeapon } from "../entities/weapons";
 const initialContext = {
-  currentPlayer: 0,
+  currentPlayer: 1,
   players: [
     {
       name: "Lord Holle",
@@ -17,7 +17,7 @@ const initialContext = {
       },
       items: [],
       bonuses: [],
-      weapons: [weapons.find((weapon) => weapon.name === "Knife")],
+      weapons: [getPlayerStartingWeapon()],
     },
     setupMonster(),
   ],

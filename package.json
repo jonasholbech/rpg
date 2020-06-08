@@ -29,6 +29,7 @@
     "plato": "^1.7.0"
   },
   "dependencies": {
+    "uniqid": "^5.2.0",
     "xstate": "^4.10.0"
   }
 }

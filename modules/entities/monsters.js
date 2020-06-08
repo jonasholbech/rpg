@@ -1,5 +1,6 @@
+import uniqid from "uniqid";
 import { rndWeaponForLevel } from "./weapons";
-import { getAttributeWithBonuses } from "../utils";
+import { getAttributeWithBonuses, ID } from "../utils";
 import { getRndItems } from "./items";
 
 export const monsters = [
@@ -69,6 +70,7 @@ export function setupMonster() {
   monster.hitpoints = getAttributeWithBonuses(monster, "con") * 2;
   monster.AI = true;
   monster.items = getRndItems();
+  monster.id = uniqid("monster-");
 
   return monster;
 }

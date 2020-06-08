@@ -1,3 +1,4 @@
+import uniqid from "uniqid";
 export const all = [
   {
     name: "Fork",
@@ -38,5 +39,12 @@ export const all = [
 ];
 export function rndWeaponForLevel(lvl) {
   const filtered = all.filter((weapon) => weapon.minLevel <= lvl);
-  return filtered[Math.floor(Math.random() * filtered.length)];
+  const weapon = filtered[Math.floor(Math.random() * filtered.length)];
+  weapon.id = uniqid("weapon-");
+  return weapon;
+}
+export function getPlayerStartingWeapon() {
+  const weapon = all.find((weapon) => weapon.name === "Knife");
+  weapon.id = uniqid("weapon-");
+  return weapon;
 }

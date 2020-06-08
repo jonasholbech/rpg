@@ -10,7 +10,7 @@ import initialContext from "./machineparts/initialContext";
 //Spells are earned or picked up?
 const RPGMachine = Machine(
   {
-    initial: "town",
+    initial: "idle",
     strict: true,
     context: { ...initialContext },
     states: {

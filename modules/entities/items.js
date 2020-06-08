@@ -1,3 +1,4 @@
+import uniqid from "uniqid";
 import { rndBetween } from "../utils";
 export const items = [
   //TODO: change should be an integer
@@ -76,7 +77,9 @@ export function getRndItems(min = 0, max = 2) {
   const amount = rndBetween(min, max);
   let response = [];
   for (let i = 0; i < amount; i++) {
-    response.push(items[Math.floor(Math.random() * items.length)]);
+    const item = items[Math.floor(Math.random() * items.length)];
+    item.id = uniqid("item-");
+    response.push(item);
   }
   return response;
 }
