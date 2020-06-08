@@ -21,12 +21,11 @@ export default class Logger extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `<h2>Log</h2><dl></dl>`;
   }
-  //TODO: minutes are like 4 and not 04, is there a different method i should use?
   _updateLog(log) {
     const dt = document.createElement("dt");
-    dt.textContent = `${log.ts.getHours()}:${log.ts.getMinutes()}:${String(
-      log.ts.getSeconds()
-    ).padStart(2, "0")}`;
+    dt.textContent = `${String(log.ts.getHours()).padStart(2, "0")}:${String(
+      log.ts.getMinutes()
+    ).padStart(2, "0")}:${String(log.ts.getSeconds()).padStart(2, "0")}`;
     const dd = document.createElement("dd");
     dd.textContent = log.message;
     this.querySelector("dl").prepend(dd);
