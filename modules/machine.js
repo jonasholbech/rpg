@@ -10,7 +10,7 @@ import initialContext from "./machineparts/initialContext";
 //Spells are earned or picked up?
 const RPGMachine = Machine(
   {
-    initial: "healer",
+    initial: "town",
     strict: true,
     context: { ...initialContext },
     states: {
@@ -126,36 +126,56 @@ const RPGMachine = Machine(
       },
       town: {
         //TODO:
+        initial: "outskirts",
         on: {
-          VISIT_HEALER: "healer",
-          VISIT_BLACKSMITH: "blacksmith",
+          VISIT_HEALER: ".healer",
+          VISIT_BLACKSMITH: ".blacksmith",
           LEAVE: "nextEnemy",
         },
+
+        states: {
+          outskirts: {},
+          healer: {
+            on: {
+              HEAL: {
+                target: "",
+                actions: "heal",
+              },
+              SELL_ITEM: {
+                target: "",
+                actions: "sellItem",
+              },
+              BUY_ITEM: {
+                target: "",
+                actions: "buyItem",
+              },
+            },
+          },
+          blacksmith: {
+            on: {
+              SELL_ITEM: {
+                target: "",
+                actions: "sellItem",
+              },
+              BUY_ITEM: {
+                target: "",
+                actions: "buyItem",
+              },
+            },
+          },
+        },
       },
-      healer: {
-        HEAL: {
-          target: "",
-          actions: "heal",
-        },
-        SELL_ITEM: {
-          target: "",
-          actions: "setItem",
-        },
-        BUY_ITEM: {
-          target: "",
-          actions: "buyItem",
-        },
-      },
+      /*
       blacksmith: {
         SELL_ITEM: {
           target: "",
-          actions: "setItem",
+          actions: "sellItem",
         },
         BUY_ITEM: {
           target: "",
           actions: "buyItem",
         },
-      },
+      },*/
     },
   },
   {

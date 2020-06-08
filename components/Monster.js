@@ -25,7 +25,6 @@ export default class Monster extends HTMLElement {
   }
   _newMonster(ctx) {
     //TODO: i tvivl om det her er helt ok, skulle den bare køre hver gang?
-    console.log("new monster");
     this._updateWeaponList(ctx.weapons);
     this._updateItemsList(ctx.items);
   }

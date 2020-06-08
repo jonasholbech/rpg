@@ -1,7 +1,7 @@
 import { setupMonster } from "../entities/monsters";
 import { all as weapons } from "../entities/weapons";
 const initialContext = {
-  currentPlayer: -1,
+  currentPlayer: 0,
   players: [
     {
       name: "Lord Holle",

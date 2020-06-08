@@ -25,12 +25,23 @@ export default class Town extends HTMLElement {
     <section>
       <h1>Town</h1>
       <nav><button data-event="VISIT_HEALER">Healer</button><button data-event="VISIT_BLACKSMITH">Blacksmith</button><button  data-event="LEAVE">Leave</button></nav>
-      <div class="merchant"></div>
+      <div class="merchants">
+        
+      </div>
     </section>`;
-    this.querySelector(`[data-event="VISIT_HEALER"]`).addEventListener(
-      "click",
-      (e) => {}
-    );
+
+    if (this._state.matches("town.healer")) {
+      const healer = document.createElement("rpg-healer");
+      healer.state = this._state;
+      healer.send = this._send;
+      this.querySelector(".merchants").appendChild(healer);
+    }
+    this.querySelectorAll(`button[data-event]`).forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        this._send(e.target.dataset.event);
+        this.remove();
+      });
+    });
   }
   _update() {
     /* this.querySelector("#next").addEventListener("click", (e) => {
@@ -43,7 +54,7 @@ export default class Town extends HTMLElement {
     });
     this._toggleButtons();*/
   }
-  _setWeaponsPlayer() {
+  /*_setWeaponsPlayer() {
     //TODO:: setWeap, setitem player, monster are the same, refractor
     let data = "";
     this._state.context.players[0].weapons.forEach((w, i) => {
@@ -126,6 +137,57 @@ export default class Town extends HTMLElement {
         this.remove();
       });
     });
-  }
+  }*/
 }
 customElements.define("rpg-town", Town);
+
+class Healer extends HTMLElement {
+  constructor() {
+    super();
+    this.nodes;
+  }
+  set state(state) {
+    this._state = state;
+    if (this.nodes) {
+      this._update();
+    }
+  }
+  set send(val) {
+    this._send = val;
+  }
+  connectedCallback() {
+    this._initialRender();
+    /*this.querySelector(`button[data-event="SELL_ITEM"]`).addEventListener(
+      "click",
+      (e) => {
+        this.send("SELL_ITEM");
+      }
+    );
+    this.querySelector(`button[data-event="LEAVE"]`).addEventListener(
+      "click",
+      (e) => {
+        this.send("LEAVE");
+      }
+    );*/
+  }
+  _update() {
+    console.log("update");
+    this.nodes.healBtn.disabled = this._state.context.players[0].gold < 5;
+  }
+  _initialRender() {
+    this.innerHTML = `
+        <h2>Healer</h2>
+        <button data-event="HEAL">Heal (5gc)</button>
+        <ol class="sellItems"></ol>
+        <ol class="buyItems"></ol>
+        <button data-event="SELL_ITEM">Sell</button>
+    `;
+    this.nodes = {
+      healBtn: this.querySelector(`button[data-event="HEAL"]`),
+      buyList: this.querySelector(".buyItems"),
+      sellList: this.querySelector(".sellItems"),
+    };
+    this._update();
+  }
+}
+customElements.define("rpg-healer", Healer);

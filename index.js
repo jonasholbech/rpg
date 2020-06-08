@@ -15,8 +15,9 @@ const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(
   (state) => {
-    console.groupCollapsed("logger");
     console.log(state.value);
+    console.groupCollapsed("logger");
+
     console.log(state.context);
     console.table(state.context.players[0].bonuses);
     console.log(state);
@@ -85,11 +86,9 @@ function render(state) {
     case "postBattle":
       openPostBattleScreen(state);
       break;
-    case "town":
-    case "healer":
-    case "blacksmith":
-      openTownScreen(state);
-      break;
+  }
+  if (state.matches("town")) {
+    openTownScreen(state);
   }
 }
 
