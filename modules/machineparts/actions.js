@@ -129,6 +129,9 @@ export const actions = {
       );
       return players;
     },
+    currentPlayer: (ctx) => {
+      return -1;
+    },
   }),
   dropWeapon: assign({
     players: (ctx, evt) => {

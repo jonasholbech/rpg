@@ -27,9 +27,9 @@ const service = interpret(extendedMachine, { devTools: true }).onTransition(
 window.service = service;
 
 function firstPaint(initialContext) {
-  console.log("First Paint");
-  //initialContext.players.forEach((player, index) => {
+  console.log("First Paint", initialContext);
   let player = initialContext.players[0];
+
   const p = document.createElement("rpg-player");
   p.setAttribute("name", player.name);
   p.setAttribute("index", 0);
@@ -38,21 +38,18 @@ function firstPaint(initialContext) {
   p.str = player.attributes.str;
   p.setAttribute("con", player.attributes.con);
   p.setAttribute("dex", player.attributes.dex);
-
   p.weapons = player.weapons;
   p.items = player.items;
   document.querySelector("#players").appendChild(p);
-  //});
+
   const monster = document.createElement("rpg-monster");
   document.querySelector("#players").appendChild(monster);
 
   setTimeout(() => {
     document.querySelector("rpg-interpreter").service = service;
     document.querySelector("rpg-interpreter").state = {}; //TODO: initialstate
-    document.querySelectorAll("rpg-player").forEach((player, index) => {
-      //TODO: forEach not needed, only one
-      player.service = service;
-    });
+    const player = document.querySelector("rpg-player");
+    player.service = service;
     service.start();
   }, 1); //RAF instead? the service starts before the elements are registered
 }
@@ -62,23 +59,24 @@ function render(state) {
   document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
   document.querySelector("rpg-interpreter").state = state;
   //document.querySelector("rpg-player").str = Date.now();
-  document.querySelectorAll("rpg-player").forEach((player, index) => {
-    player.nextEvents = state.nextEvents;
-    player.state = state.context.players[index];
-    player.hitpoints = state.context.players[index].hitpoints;
-    player.xp = state.context.players[index].xp;
-    player.str = state.context.players[index].attributes.str;
-    player.dex = state.context.players[index].attributes.dex;
-    player.con = state.context.players[index].attributes.con;
-    player.level = state.context.players[index].level;
-    player.weapons = state.context.players[index].weapons;
-    player.items = state.context.players[index].items;
-    if (index === state.context.currentPlayer) {
-      player.active = true;
-    } else {
-      player.active = false;
-    }
-  });
+  const player = document.querySelector("rpg-player");
+  const index = 0;
+  player.nextEvents = state.nextEvents;
+  player.state = state.context.players[index];
+  player.hitpoints = state.context.players[index].hitpoints;
+  player.xp = state.context.players[index].xp;
+  player.str = state.context.players[index].attributes.str;
+  player.dex = state.context.players[index].attributes.dex;
+  player.con = state.context.players[index].attributes.con;
+  player.level = state.context.players[index].level;
+  player.weapons = state.context.players[index].weapons;
+  player.items = state.context.players[index].items;
+  if (index === state.context.currentPlayer) {
+    player.active = true;
+  } else {
+    player.active = false;
+  }
+
   switch (state.value) {
     case "levelUp":
       openLevelUpScreen(state);
@@ -103,4 +101,3 @@ function openPostBattleScreen(state) {
   pbsComp.send = service.send;
   document.body.appendChild(pbsComp);
 }
-//window.addEventListener("load", () => firstPaint(extendedMachine.context));
