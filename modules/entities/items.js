@@ -2,6 +2,8 @@ import { rndBetween } from "../utils";
 export const items = [
   //TODO: change should be an integer
   //amount is the split with an interval
+  //TODO: modify chances for each one
+  //TODO: magic equipment (could just be a knife (1-4) that's a (2-5))
   {
     name: "Healing Potion",
     usable: true,
@@ -29,16 +31,6 @@ export const items = [
       type: "ATTR_CHANGE",
       duration: 1,
       attr: "dex",
-      change: 10,
-    },
-  },
-  {
-    name: "Constitution Potion",
-    usable: true,
-    actionPayload: {
-      type: "ATTR_CHANGE",
-      duration: 1,
-      attr: "con",
       change: 10,
     },
   },

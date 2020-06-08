@@ -66,8 +66,8 @@ export const actions = {
             2
         );
         damage += modifier;
-        if (damage < 1) {
-          damage = 1;
+        if (damage < minDamage) {
+          damage = minDamage;
         }
         players[nextPlayer].hitpoints -= damage;
         observer.publish(
