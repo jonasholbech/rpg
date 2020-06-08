@@ -1,8 +1,7 @@
 import { rndWeaponForLevel } from "./weapons";
 import { getAttributeWithBonuses } from "../utils";
 import { getRndItems } from "./items";
-//TODO: if monster has a weapon (like a tail for a dragon), dont add another
-//TODO: not all weapons are collecatble (like a bite), maybe that should drop other stuff? like a tooth?
+
 export const monsters = [
   {
     name: "Snotling",
@@ -66,7 +65,7 @@ export function setupMonster() {
   }
 
   monster.bonuses = [];
-  monster.gold = 0; //TODO: gold er i items for monstre
+  monster.gold = 0; //TODO: gold er i items for monstre, kan måske undværes
   monster.hitpoints = getAttributeWithBonuses(monster, "con") * 2;
   monster.AI = true;
   monster.items = getRndItems();

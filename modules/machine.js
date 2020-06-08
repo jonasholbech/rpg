@@ -3,8 +3,6 @@ import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
 import initialContext from "./machineparts/initialContext";
 
-//TODO: create new monster component
-//TODO: store every x levels or pick where to go
 //TODO: auto combat? setinterval=>attack (+ level up?)
 //TODO: create character initially
 //TODO: negative bonuses, poison (throwable on opponent, or through weapon (bite))
@@ -86,7 +84,7 @@ const RPGMachine = Machine(
             target: "idle",
           },
         },
-      }, //TODO:
+      },
       levelUp: {
         entry: [{ type: "justLogIt", payload: "Player leveled up" }],
         on: {
