@@ -9,6 +9,8 @@ import LevelUp from "./components/LevelUp";
 import Logger from "./components/Logger";
 import PostBattle from "./components/PostBattle";
 import Monster from "./components/Monster";
+import Town from "./components/Town";
+
 const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(
@@ -83,6 +85,11 @@ function render(state) {
     case "postBattle":
       openPostBattleScreen(state);
       break;
+    case "town":
+    case "healer":
+    case "blacksmith":
+      openTownScreen(state);
+      break;
   }
 }
 
@@ -99,4 +106,11 @@ function openPostBattleScreen(state) {
   pbsComp.state = state;
   pbsComp.send = service.send;
   document.body.appendChild(pbsComp);
+}
+
+function openTownScreen(state) {
+  const townComp = document.createElement("rpg-town");
+  townComp.state = state;
+  townComp.send = service.send;
+  document.body.appendChild(townComp);
 }

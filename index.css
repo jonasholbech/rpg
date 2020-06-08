@@ -1,17 +1,25 @@
 * {
   box-sizing: border-box;
 }
+body {
+  background: #f5f5f5;
+}
 main {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 #players {
   display: flex;
+
+  gap: 1rem;
 }
 rpg-player,
 rpg-monster {
   border: 1px solid #000;
   min-width: 300px;
+  background-color: #fff;
+  margin-right: 1rem;
+  box-shadow: 3px 4px 2px -1px rgba(0, 0, 0, 0.75);
 }
 rpg-player header,
 rpg-monster header {
@@ -25,6 +33,10 @@ rpg-player header .xp {
   position: absolute;
   z-index: 1;
   margin: 0;
+}
+rpg-player header h1,
+rpg-monster header h1 {
+  padding: 0.5rem;
 }
 rpg-player header .hp,
 rpg-monster header .hp {
@@ -78,7 +90,8 @@ rpg-monster ol {
 }
 
 rpg-levelup,
-rpg-postbattle {
+rpg-postbattle,
+rpg-town {
   background: rgba(0, 0, 0, 0.4);
   width: 100vw;
   height: 100vh;
@@ -90,7 +103,8 @@ rpg-postbattle {
   z-index: 2;
 }
 rpg-levelup section,
-rpg-postbattle section {
+rpg-postbattle section,
+rpg-town section {
   background: white;
   padding: 2rem;
   z-index: 3;
@@ -110,8 +124,10 @@ rpg-logger {
   flex-direction: column;
 }
 rpg-logger dl {
+  padding: 0.5rem;
   border: 1px solid hotpink;
   max-height: 400px;
+  background: white;
   overflow-y: scroll;
   overflow-x: hidden;
 }

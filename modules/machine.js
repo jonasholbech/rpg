@@ -6,9 +6,11 @@ import initialContext from "./machineparts/initialContext";
 //TODO: auto combat? setinterval=>attack (+ level up?)
 //TODO: create character initially
 //TODO: negative bonuses, poison (throwable on opponent, or through weapon (bite))
+//TODO: spells & mana, fires on own turn, but does not end it
+//Spells are earned or picked up?
 const RPGMachine = Machine(
   {
-    initial: "idle",
+    initial: "healer",
     strict: true,
     context: { ...initialContext },
     states: {
@@ -122,7 +124,38 @@ const RPGMachine = Machine(
           "": "nextPlayer",
         },
       },
-      town: {}, //TODO:
+      town: {
+        //TODO:
+        on: {
+          VISIT_HEALER: "healer",
+          VISIT_BLACKSMITH: "blacksmith",
+          LEAVE: "nextEnemy",
+        },
+      },
+      healer: {
+        HEAL: {
+          target: "",
+          actions: "heal",
+        },
+        SELL_ITEM: {
+          target: "",
+          actions: "setItem",
+        },
+        BUY_ITEM: {
+          target: "",
+          actions: "buyItem",
+        },
+      },
+      blacksmith: {
+        SELL_ITEM: {
+          target: "",
+          actions: "setItem",
+        },
+        BUY_ITEM: {
+          target: "",
+          actions: "buyItem",
+        },
+      },
     },
   },
   {
