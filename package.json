@@ -8,7 +8,14 @@
     "start": "parcel index.html --open",
     "build": "parcel build index.html --public-url .",
     "deploy": "npm run build && gh-pages -d dist",
-    "clean-start": "rm -rf dist/ && rm -rf .cache/ && rm -rf node_modules && npm install"
+    "clean-start": "rm -rf dist/ && rm -rf .cache/ && rm -rf node_modules && npm install",
+    "analyze": "plato --recurse -d platoreports -t 'RPG Plato Report' -x 'platoreports|dist/|.cache/|node_modules/' ."
+  },
+  "husky": {
+    "hooks": {
+      "post-commit": "npm run analyze",
+      "post-merge": "npm run analyze"
+    }
   },
   "keywords": [],
   "author": "",
@@ -17,7 +24,9 @@
     "@babel/core": "^7.0.0-0",
     "@babel/plugin-transform-runtime": "^7.10.1",
     "gh-pages": "^3.0.0",
-    "parcel-bundler": "^1.12.4"
+    "husky": "^4.2.5",
+    "parcel-bundler": "^1.12.4",
+    "plato": "^1.7.0"
   },
   "dependencies": {
     "xstate": "^4.10.0"

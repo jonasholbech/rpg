@@ -3,3 +3,4 @@ dist/
 .cache/
 modules/bugXstate.js
 modules/clipboard.js
+platoreports/
