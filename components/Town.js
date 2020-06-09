@@ -78,6 +78,7 @@ export default class Town extends HTMLElement {
 customElements.define("rpg-town", Town);
 
 class Healer extends HTMLElement {
+  //TODO: laves om til rpg-merchant, typen er underordnet
   constructor() {
     super();
     this.nodes;
@@ -149,7 +150,7 @@ class Healer extends HTMLElement {
           });
           button.parentElement.remove();
         });
-        li.append(thing.name + ` ${Math.floor(thing.price / 2)}gcs `, button); //TODO: sell rice modifier in settings module
+        li.append(thing.name + ` ${Math.floor(thing.price / 2)}gcs `, button); //TODO: sell price modifier in settings module
         fragment.appendChild(li);
       }
     });
@@ -158,7 +159,7 @@ class Healer extends HTMLElement {
   _setMerchantSelling(type) {
     if (!this.itemsForSale) {
       if (type === "items") {
-        this.itemsForSale = getRndItems(2, 5); //TODO: skal nok flyttes, vil blive kaldt ved hver re-render
+        this.itemsForSale = getRndItems(2, 5);
       }
     }
 
