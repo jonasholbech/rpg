@@ -75,6 +75,7 @@ class Merchant extends HTMLElement {
         const button = document.createElement("button");
         button.textContent = `Sell`;
         button.dataset.itemId = thing.id;
+        console.log(thing.id);
         button.addEventListener("click", (e) => {
           this._send({
             type: "SELL_ITEM",

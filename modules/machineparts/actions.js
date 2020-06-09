@@ -112,6 +112,7 @@ export const actions = {
   }),
   setInitialStats: assign({
     players: (ctx, evt) => {
+      console.table(ctx.players[0].items);
       const players = [...ctx.players];
       players.forEach((pl) => {
         pl.hitpoints = getAttributeWithBonuses(pl, "con") * 2;

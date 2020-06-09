@@ -91,10 +91,11 @@ export const items = [
 
 export function getRndItems(min = 0, max = 2) {
   const amount = rndBetween(min, max);
-  let response = [];
+  const response = [];
   for (let i = 0; i < amount; i++) {
     const item = items[Math.floor(Math.random() * items.length)];
-    item.id = uniqid("item-", "-" + i);
+    item.id = uniqid(i + "-");
+    console.log(item.name, item.id);
     response.push(item);
   }
   return response;
