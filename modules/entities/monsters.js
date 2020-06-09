@@ -78,7 +78,7 @@ export const monsters = [
   },
 ];
 export function setupMonster() {
-  const monster = monsters[Math.floor(Math.random() * monsters.length)];
+  const monster = { ...monsters[Math.floor(Math.random() * monsters.length)] };
   if (!monster.weapons) {
     monster.weapons = [rndWeaponForLevel(monster.level)];
   }

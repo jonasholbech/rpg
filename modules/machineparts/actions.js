@@ -2,6 +2,7 @@ import { assign } from "xstate";
 import { setupMonster } from "../entities/monsters";
 import initialContext from "./initialContext";
 import { rndBetween, getAttributeWithBonuses } from "../utils";
+import { getRndItems } from "../entities/items";
 import { observer } from "../observer";
 import { all as weapons } from "../entities/weapons";
 export const actions = {
@@ -112,11 +113,18 @@ export const actions = {
   }),
   setInitialStats: assign({
     players: (ctx, evt) => {
-      console.table(ctx.players[0].items);
       const players = [...ctx.players];
       players.forEach((pl) => {
         pl.hitpoints = getAttributeWithBonuses(pl, "con") * 2;
       });
+      return players;
+    },
+  }),
+  assignInitialItems: assign({
+    players: (ctx) => {
+      const players = [...ctx.players];
+      players[0].items = getRndItems(2, 4);
+      console.table(players[0].items);
       return players;
     },
   }),

@@ -59,7 +59,7 @@ export function getRndWeapons(min = 0, max = 2) {
   const amount = rndBetween(min, max);
   let response = [];
   for (let i = 0; i < amount; i++) {
-    const item = all[Math.floor(Math.random() * all.length)];
+    const item = { ...all[Math.floor(Math.random() * all.length)] };
     item.id = uniqid("weapon-", "-" + i);
     response.push(item);
   }

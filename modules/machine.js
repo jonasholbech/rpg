@@ -17,7 +17,7 @@ const RPGMachine = Machine(
     context: { ...initialContext },
     states: {
       idle: {
-        entry: ["setInitialStats", "createNewEnemy"],
+        entry: ["setInitialStats", "assignInitialItems"], //, "createNewEnemy"
         on: {
           TURN_START: "town",
         },

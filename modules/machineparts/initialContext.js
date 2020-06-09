@@ -16,7 +16,7 @@ const initialContext = {
         dex: 10,
         con: 10,
       },
-      items: getRndItems(2, 4),
+      items: [],
       bonuses: [],
       weapons: [getPlayerStartingWeapon()],
     },
