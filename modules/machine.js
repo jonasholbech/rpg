@@ -2,7 +2,9 @@ import { Machine } from "xstate";
 import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
 import initialContext from "./machineparts/initialContext";
-//TODO: classes?
+//TODO: more logs
+//TODO: filter on logs (type)
+//TODO: player classes?
 //TODO: auto combat? setinterval=>attack (+ level up?)
 //TODO: create character initially, start in town
 //TODO: negative bonuses, poison (throwable on opponent, or through weapon (bite))
@@ -10,14 +12,14 @@ import initialContext from "./machineparts/initialContext";
 //Spells are earned or picked up?
 const RPGMachine = Machine(
   {
-    initial: "town",
+    initial: "idle",
     strict: true,
     context: { ...initialContext },
     states: {
       idle: {
         entry: ["setInitialStats", "createNewEnemy"],
         on: {
-          TURN_START: "nextPlayer",
+          TURN_START: "town",
         },
       },
       nextPlayer: {

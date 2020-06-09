@@ -32,11 +32,29 @@ export const monsters = [
     },
   },
   {
+    name: "Cut Throat",
+    level: 1,
+    attributes: {
+      str: 6,
+      dex: 7,
+      con: 4,
+    },
+  },
+  {
+    name: "Orc",
+    level: 1,
+    attributes: {
+      str: 11,
+      dex: 6,
+      con: 10,
+    },
+  },
+  {
     name: "Dinosaur Monster",
     level: 1,
     attributes: {
       str: 20,
-      dex: 7,
+      dex: 1,
       con: 20,
     },
     weapons: [

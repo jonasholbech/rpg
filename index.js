@@ -10,6 +10,7 @@ import Logger from "./components/Logger";
 import PostBattle from "./components/PostBattle";
 import Monster from "./components/Monster";
 import Town from "./components/Town";
+import Merchant from "./components/Merchant";
 
 const extendedMachine = RPGMachine.withConfig({});
 

@@ -94,7 +94,7 @@ export function getRndItems(min = 0, max = 2) {
   let response = [];
   for (let i = 0; i < amount; i++) {
     const item = items[Math.floor(Math.random() * items.length)];
-    item.id = uniqid("item-");
+    item.id = uniqid("item-", "-" + i);
     response.push(item);
   }
   return response;
