@@ -144,7 +144,7 @@ export const actions = {
   }),
   dropWeapon: assign({
     players: (ctx, evt) => {
-      const players = [...ctx.players];
+      const players = [...ctx.players]; //TODO: (flere steder) skal bruge itemid i stedet
       players[0].weapons.splice(Number(evt.index), 1);
       return players;
     },
@@ -254,6 +254,30 @@ export const actions = {
     },
         */
       player.items.splice(index, 1);
+      return players;
+    },
+  }),
+  sellItem: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      /*
+      evt=> type: "SELL_ITEM", id: "item-kb7qodvy", entityType: "items", price: 2 }
+      */
+      players[0][evt.entityType] = players[0][evt.entityType].filter(
+        (item) => item.id != evt.id
+      );
+      players[0].gold += evt.price;
+      return players;
+    },
+  }),
+  buyItem: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      /*
+      evt=> type: "BUY_ITEM", id: "item-kb7qodvy", entityType: "items", item: {...} }
+      */
+      players[0][evt.entityType].push(evt.item);
+      players[0].gold -= evt.item.price;
       return players;
     },
   }),

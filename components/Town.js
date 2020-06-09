@@ -1,3 +1,4 @@
+import { getRndItems } from "../modules/entities/items";
 export default class Town extends HTMLElement {
   constructor() {
     super();
@@ -7,7 +8,9 @@ export default class Town extends HTMLElement {
 
   set state(state) {
     this._state = state;
-    this._update();
+    if (this.nodes) {
+      this._update();
+    }
   }
   set send(val) {
     this._send = val;
@@ -31,26 +34,46 @@ export default class Town extends HTMLElement {
     </section>`;
     this.nodes = {
       gold: this.querySelector("h1 span"),
-      merchants: this.querySelector(".merchants"),
+      merchantContainer: this.querySelector(".merchants"),
+      merchant: null,
     };
     this.querySelectorAll(`nav button[data-event]`).forEach((btn) => {
       btn.addEventListener("click", (e) => {
         this._send(e.target.dataset.event);
-        this.remove();
+        if (e.target.dataset.event === "LEAVE") {
+          this.remove();
+        }
       });
     });
     this._setMerchant();
   }
   _setMerchant() {
-    this.nodes.merchants.innerHTML = "";
+    console.log(
+      "set merchant",
+      this._state.matches("town.healer"),
+      this._state.value
+    );
+
     if (this._state.matches("town.healer")) {
-      const healer = document.createElement("rpg-healer");
-      healer.state = this._state;
-      healer.send = this._send;
-      this.nodes.merchants.appendChild(healer);
+      if (!document.querySelector("rpg-healer")) {
+        this.nodes.merchantContainer.innerHTML = "";
+        const healer = document.createElement("rpg-healer");
+        healer.state = this._state;
+        healer.send = this._send;
+        this.nodes.merchantContainer.appendChild(healer);
+        this.nodes.merchant = this.querySelector(".merchants>*:first-child");
+        console.log(this.nodes.merchant);
+      }
     }
   }
-  _update() {}
+  _update() {
+    this._setMerchant();
+    console.log("update");
+    if (this.nodes.merchant) {
+      this.nodes.gold.textContent = this._state.context.players[0].gold;
+      this.nodes.merchant.state = this._state;
+    }
+  }
 }
 customElements.define("rpg-town", Town);
 
@@ -58,6 +81,7 @@ class Healer extends HTMLElement {
   constructor() {
     super();
     this.nodes;
+    this.itemsForSale;
   }
   set state(state) {
     this._state = state;
@@ -70,22 +94,11 @@ class Healer extends HTMLElement {
   }
   connectedCallback() {
     this._initialRender();
-    /*this.querySelector(`button[data-event="SELL_ITEM"]`).addEventListener(
-      "click",
-      (e) => {
-        this.send("SELL_ITEM");
-      }
-    );
-    this.querySelector(`button[data-event="LEAVE"]`).addEventListener(
-      "click",
-      (e) => {
-        this.send("LEAVE");
-      }
-    );*/
   }
   _update() {
     console.log("update");
     this.nodes.healBtn.disabled = this._state.context.players[0].gold < 5;
+    this._setPlayerSelling("items");
   }
   _initialRender() {
     this.innerHTML = `
@@ -101,7 +114,6 @@ class Healer extends HTMLElement {
                 <ol class="buyItems"></ol>
             </section>
         </div>
-        <button data-event="SELL_ITEM">Sell</button>
     `;
     this.nodes = {
       healBtn: this.querySelector(`button[data-event="HEAL"]`),
@@ -121,18 +133,57 @@ class Healer extends HTMLElement {
   _setPlayerSelling(type) {
     const player = this._state.context.players[0];
     const fragment = document.createDocumentFragment();
+    this.nodes.sellList.innerHTML = "";
     player[type].forEach((thing) => {
       if (!thing.hasOwnProperty("usable") || thing.usable === true) {
         const li = document.createElement("li");
         const button = document.createElement("button");
         button.textContent = `Sell`;
         button.dataset.itemId = thing.id;
-        li.append(thing.name + ` ${thing.price / 2}gcs `, button); //TODO: sell rice modifier in settings module
+        button.addEventListener("click", (e) => {
+          this._send({
+            type: "SELL_ITEM",
+            id: thing.id,
+            entityType: type,
+            price: Math.floor(thing.price / 2),
+          });
+          button.parentElement.remove();
+        });
+        li.append(thing.name + ` ${Math.floor(thing.price / 2)}gcs `, button); //TODO: sell rice modifier in settings module
         fragment.appendChild(li);
       }
     });
     this.nodes.sellList.appendChild(fragment);
   }
-  _setMerchantSelling(type) {}
+  _setMerchantSelling(type) {
+    if (!this.itemsForSale) {
+      if (type === "items") {
+        this.itemsForSale = getRndItems(2, 5); //TODO: skal nok flyttes, vil blive kaldt ved hver re-render
+      }
+    }
+
+    const fragment = document.createDocumentFragment();
+    this.itemsForSale.forEach((thing) => {
+      if (!thing.hasOwnProperty("usable") || thing.usable === true) {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.textContent = `Buy`;
+        button.dataset.itemId = thing.id;
+        button.disabled = this._state.context.players[0].gold < thing.price;
+        button.addEventListener("click", (e) => {
+          this._send({
+            type: "BUY_ITEM",
+            id: thing.id,
+            entityType: type,
+            item: thing,
+          });
+          button.parentElement.remove();
+        });
+        li.append(thing.name + ` ${thing.price}gcs `, button);
+        fragment.appendChild(li);
+      }
+    });
+    this.nodes.buyList.appendChild(fragment);
+  }
 }
 customElements.define("rpg-healer", Healer);

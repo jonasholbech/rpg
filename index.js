@@ -108,8 +108,13 @@ function openPostBattleScreen(state) {
 }
 
 function openTownScreen(state) {
-  const townComp = document.createElement("rpg-town");
-  townComp.state = state;
-  townComp.send = service.send;
-  document.body.appendChild(townComp);
+  //singleton
+  if (!document.querySelector("rpg-town")) {
+    const townComp = document.createElement("rpg-town");
+    townComp.state = state;
+    townComp.send = service.send;
+    document.body.appendChild(townComp);
+  } else {
+    document.querySelector("rpg-town").state = state;
+  }
 }
