@@ -8,6 +8,7 @@ export const items = [
   {
     name: "Healing Potion",
     usable: true,
+    price: 5,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: "permanent",
@@ -18,6 +19,7 @@ export const items = [
   {
     name: "Strength Potion",
     usable: true,
+    price: 10,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: 1,
@@ -28,6 +30,7 @@ export const items = [
   {
     name: "Constitution Potion",
     usable: true,
+    price: 10,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: 10,
@@ -38,6 +41,7 @@ export const items = [
   {
     name: "Dexterity Potion",
     usable: true,
+    price: 10,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: 1,
@@ -48,6 +52,7 @@ export const items = [
   {
     name: "Strength Ring",
     usable: true,
+    price: 100,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: "permanent",
@@ -58,6 +63,7 @@ export const items = [
   {
     name: "Dexterity Ring",
     usable: true,
+    price: 100,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: "permanent",
@@ -68,6 +74,7 @@ export const items = [
   {
     name: "Constitution Ring",
     usable: true,
+    price: 100,
     actionPayload: {
       type: "ATTR_CHANGE",
       duration: "permanent",

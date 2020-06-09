@@ -1,4 +1,5 @@
 import uniqid from "uniqid";
+//TODO: price on all weapons
 export const all = [
   {
     name: "Fork",

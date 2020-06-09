@@ -2,9 +2,9 @@ import { Machine } from "xstate";
 import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
 import initialContext from "./machineparts/initialContext";
-
+//TODO: classes?
 //TODO: auto combat? setinterval=>attack (+ level up?)
-//TODO: create character initially
+//TODO: create character initially, start in town
 //TODO: negative bonuses, poison (throwable on opponent, or through weapon (bite))
 //TODO: spells & mana, fires on own turn, but does not end it
 //Spells are earned or picked up?
