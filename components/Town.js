@@ -54,18 +54,26 @@ export default class Town extends HTMLElement {
     );
 
     if (this._state.matches("town.healer")) {
-      if (!document.querySelector("rpg-merchant")) {
+      if (
+        !document.querySelector("rpg-merchant") ||
+        document.querySelector("rpg-merchant").type !== "items"
+      ) {
         this.nodes.merchantContainer.innerHTML = "";
         const merc = document.createElement("rpg-merchant");
         merc.state = this._state;
         merc.send = this._send;
         merc.type = "items";
+
         merc.merchantTitle = "Healer";
         this.nodes.merchantContainer.appendChild(merc);
         this.nodes.merchant = this.querySelector(".merchants>*:first-child");
+        console.log(document.querySelector("rpg-merchant").type);
       } //TODO: switch between merchants
     } else if (this._state.matches("town.blacksmith")) {
-      if (!document.querySelector("rpg-merchant")) {
+      if (
+        !document.querySelector("rpg-merchant") ||
+        document.querySelector("rpg-merchant").type !== "weapons"
+      ) {
         this.nodes.merchantContainer.innerHTML = "";
         const merc = document.createElement("rpg-merchant");
         merc.state = this._state;

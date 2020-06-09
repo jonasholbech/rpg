@@ -16,6 +16,9 @@ class Merchant extends HTMLElement {
   set type(val) {
     this._type = val;
   }
+  get type() {
+    return this._type;
+  }
   set merchantTitle(val) {
     this._merchantTitle = val;
   }
