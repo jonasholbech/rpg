@@ -124,7 +124,6 @@ export const actions = {
     players: (ctx) => {
       const players = [...ctx.players];
       players[0].items = getRndItems(2, 4);
-      console.table(players[0].items);
       return players;
     },
   }),
