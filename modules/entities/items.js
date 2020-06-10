@@ -4,7 +4,7 @@ export const items = [
   //TODO: change should be an integer
   //amount is the split with an interval
   //TODO: modify chances for each one
-  //TODO: magic equipment (could just be a knife (1-4) that's a (2-5))
+  //TODO: magic equipment (could just be a knife (1-4) that has (2-5))
   {
     name: "Healing Potion",
     usable: true,
