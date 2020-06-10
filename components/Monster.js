@@ -6,11 +6,13 @@ export default class Monster extends HTMLElement {
     this._observer = observer;
     this._update = this._update.bind(this);
     this._observer.subscribe("MONSTER_CONTEXT", this._update);
+    console.log("monster constructor")
     this._nodes;
     this._prevHitpoints = 0;
   }
 
   _update(ctx) {
+    console.log(ctx)
     if (!this._nodes) {
       this._getNodes();
     }

@@ -90,6 +90,7 @@ export const actions = {
   }),
   switchWeapon: assign({
     players: (ctx, evt) => {
+      console.log(evt);
       const players = [...ctx.players];
       const oldWeapon = players[ctx.currentPlayer].weapons[0];
       const newWeapon = players[ctx.currentPlayer].weapons[evt.index];
@@ -111,16 +112,20 @@ export const actions = {
       return players;
     },
   }),
-  setInitialAttributes:assign({
-      players: (ctx,evt)=>{
-        const players = [...ctx.players];
-        players[0].attributes.str = evt.stats.str;
-        players[0].attributes.dex = evt.stats.dex;
-        players[0].attributes.con = evt.stats.con;
-        players[0].name=evt.name;
-        players[0].pointsToDistribute = players[0].pointsToDistribute - evt.stats.str - evt.stats.dex - evt.stats.con
-        return players;
-      }
+  setInitialAttributes: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      players[0].attributes.str = evt.stats.str;
+      players[0].attributes.dex = evt.stats.dex;
+      players[0].attributes.con = evt.stats.con;
+      players[0].name = evt.name;
+      players[0].pointsToDistribute =
+        players[0].pointsToDistribute -
+        evt.stats.str -
+        evt.stats.dex -
+        evt.stats.con;
+      return players;
+    },
   }),
   setInitialStats: assign({
     players: (ctx, evt) => {
@@ -230,11 +235,12 @@ export const actions = {
   useItem: assign({
     players: (ctx, evt) => {
       //guard should make sure it's usable
+
       const players = [...ctx.players];
       const player = players[ctx.currentPlayer];
       const index = Number(evt.index);
       const item = player.items[index];
-
+      console.log(evt, item.actionPayload);
       switch (item.actionPayload.type) {
         case "ATTR_CHANGE":
           if (item.actionPayload.duration === "permanent") {

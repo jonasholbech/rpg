@@ -25,17 +25,25 @@ const service = interpret(extendedMachine, { devTools: true }).onTransition(
     console.log(state);
     console.groupEnd();
     observer.publish("MONSTER_CONTEXT", state.context.players[1]);
+    document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
+    document.querySelector("rpg-interpreter").state = state;
+    document.querySelector("rpg-interpreter").service = service;
     render(state);
   }
 );
 
 window.service = service;
 service.start();
+
 function render(state) {
-  switch (state.value) {
-    case "createCharacter":
-      createCharacter(state);
-      break;
+  if (state.matches("createCharacter")) {
+    createCharacter(state);
+  }
+  if (state.matches("town")) {
+    openTownScreen(state);
+  }
+  if (state.matches("combat")) {
+    setupCombat(state);
   }
 }
 function createCharacter(state) {
@@ -45,43 +53,42 @@ function createCharacter(state) {
   builder.state = state;
   builder.send = service.send;
 }
+function openTownScreen(state) {
+  //singleton
+  if (!document.querySelector("rpg-town")) {
+    const townComp = document.createElement("rpg-town");
+    townComp.state = state;
+    townComp.send = service.send;
+    document.body.appendChild(townComp);
+  } else {
+    document.querySelector("rpg-town").state = state;
+  }
+}
+
+function setupCombat(state) {
+  if (!document.querySelector("rpg-player")) {
+    const p = document.createElement("rpg-player");
+    p.state = state.context.players[0];
+    p.send = service.send;
+    p.active = state.context.currentPlayer === 0 ? true : false;
+    p.nextEvents = state.nextEvents;
+    document.querySelector("#players").appendChild(p);
+
+    const monster = document.createElement("rpg-monster");
+    document.querySelector("#players").appendChild(monster);
+  } else {
+    const p = document.querySelector("rpg-player");
+    p.state = state.context.players[0];
+    p.active = state.context.currentPlayer === 0 ? true : false;
+    p.nextEvents = state.nextEvents;
+    p.active = state.context.currentPlayer === 0 ? true : false;
+  }
+}
 /*
-function firstPaint(initialContext) {
-  console.log("First Paint", initialContext);
-  
-}
-function firstPaintBCK(initialContext) {
-  console.log("First Paint", initialContext);
-  let player = initialContext.players[0];
 
-  const p = document.createElement("rpg-player");
-  p.setAttribute("name", player.name);
-  p.setAttribute("index", 0);
-  p.setAttribute("hitpoints", player.hitpoints);
-  p.xp = player.xp;
-  p.str = player.attributes.str;
-  p.setAttribute("con", player.attributes.con);
-  p.setAttribute("dex", player.attributes.dex);
-  p.weapons = player.weapons;
-  p.items = player.items;
-  document.querySelector("#players").appendChild(p);
-
-  const monster = document.createElement("rpg-monster");
-  document.querySelector("#players").appendChild(monster);
-
-  setTimeout(() => {
-    document.querySelector("rpg-interpreter").service = service;
-    document.querySelector("rpg-interpreter").state = {}; //TODO: initialstate
-    const player = document.querySelector("rpg-player");
-    player.service = service;
-    service.start();
-  }, 1); //RAF instead? the service starts before the elements are registered
-}
-//firstPaint(extendedMachine.context);
+/
 
 function render(state) {
-  document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
-  document.querySelector("rpg-interpreter").state = state;
   const player = document.querySelector("rpg-player");
   const index = 0;
   player.nextEvents = state.nextEvents;
@@ -128,15 +135,5 @@ function openPostBattleScreen(state) {
   document.body.appendChild(pbsComp);
 }
 
-function openTownScreen(state) {
-  //singleton
-  if (!document.querySelector("rpg-town")) {
-    const townComp = document.createElement("rpg-town");
-    townComp.state = state;
-    townComp.send = service.send;
-    document.body.appendChild(townComp);
-  } else {
-    document.querySelector("rpg-town").state = state;
-  }
-}
+
 */

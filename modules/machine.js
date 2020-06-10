@@ -1,4 +1,4 @@
-import { Machine } from "xstate";
+import { Machine, send } from "xstate";
 import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
 import initialContext from "./machineparts/initialContext";
@@ -13,7 +13,7 @@ import initialContext from "./machineparts/initialContext";
 //TODO: initially we are in town, but the UI has a monster
 const RPGMachine = Machine(
   {
-    initial: "createCharacter",
+    initial: "nextEnemy",
     strict: true,
     context: { ...initialContext },
     states: {
@@ -22,119 +22,16 @@ const RPGMachine = Machine(
           ASSIGN_ATTR: {
             target: "idle",
             actions: "setInitialAttributes",
-          }
+          },
         },
       },
       idle: {
         entry: ["setInitialStats", "assignInitialItems"], //, "createNewEnemy"
         on: {
-          TURN_START: "town",
+          "": "town",
         },
       },
-      nextPlayer: {
-        entry: ["switchPlayer"],
-        on: {
-          "": [{ target: "attacking", cond: "isAI" }, "waiting"], //TODO: AI can only attack
-        },
-      },
-      waiting: {
-        on: {
-          ATTACK: "attacking",
-          PARRY: "parrying",
-          SWITCH_WEAPON: "switchWeapon",
-          USE_ITEM: [{ target: "useItem", cond: "hasItems" }],
-        },
-      },
-      switchWeapon: {
-        entry: ["switchWeapon"],
-        on: {
-          "": "waiting",
-        },
-      },
-      useItem: {
-        entry: ["useItem"],
-        on: {
-          "": "waiting",
-        },
-      },
-      attacking: {
-        entry: ["dealDamage"],
-        on: {
-          "": [
-            {
-              target: "nextPlayer",
-              cond: "bothAlive",
-            },
-            {
-              target: "playerWon",
-              cond: "AIDied",
-            },
-            {
-              target: "playerDied",
-            },
-          ],
-        },
-      },
-      parrying: {
-        //TODO: curse (bonus) on opponent, -50 on attack (dex)?
-        on: {
-          "": "nextPlayer",
-        },
-      },
-      playerWon: {
-        entry: ["awardXP", "removeBonuses"],
-        on: {
-          "": [
-            { target: "levelUp", cond: "checkLevelUp" },
-            { target: "postBattle" },
-          ],
-        },
-      },
-      playerDied: {
-        on: {
-          PLAY_AGAIN: {
-            actions: ["reset"],
-            target: "idle",
-          },
-        },
-      },
-      levelUp: {
-        entry: [{ type: "justLogIt", payload: "Player leveled up" }],
-        on: {
-          NEW_STATS: {
-            actions: ["applyNewStats"],
-            target: "postBattle",
-          },
-        },
-      },
-      postBattle: {
-        on: {
-          PICKUP_WEAPON: {
-            actions: ["pickUpWeapon"],
-            target: "",
-          },
-          DROP_WEAPON: {
-            target: "",
-            actions: ["dropWeapon"],
-          },
-          PICKUP_ITEM: {
-            actions: ["pickUpItem"],
-            target: "",
-          },
-          DROP_ITEM: {
-            target: "",
-            actions: ["dropItem"],
-          },
-          TELEPORT: "town",
-          NEXT: "nextEnemy",
-        },
-      },
-      nextEnemy: {
-        entry: ["createNewEnemy"],
-        on: {
-          "": "nextPlayer",
-        },
-      },
+
       town: {
         //TODO:
         initial: "outskirts",
@@ -176,6 +73,131 @@ const RPGMachine = Machine(
           },
         },
       },
+      combat: {
+        initial: "waiting",
+        entry: ["switchPlayer"],
+        on: {
+          ATTACK: ".attacking",
+          PARRY: ".parrying",
+          SWITCH_WEAPON: ".switchWeapon",
+          USE_ITEM: [{ target: ".useItem", cond: "hasItems" }],
+          LEVEL_UP: "levelUp",
+          POST_BATTLE: "postBattle",
+        },
+        states: {
+          waiting: {},
+          attacking: {
+            entry: ["dealDamage"],
+            on: {
+              "": [
+                {
+                  target: "nextPlayer",
+                  cond: "bothAlive",
+                },
+                {
+                  target: "playerWon",
+                  cond: "AIDied",
+                },
+                {
+                  target: "playerDied",
+                },
+              ],
+            },
+          },
+          parrying: {
+            //TODO: curse (bonus) on opponent, -50 on attack (dex)?
+            on: {
+              "": "nextPlayer",
+            },
+          },
+          switchWeapon: {
+            entry: ["switchWeapon"],
+            on: {
+              "": "waiting",
+            },
+          },
+          useItem: {
+            entry: ["useItem"],
+            on: {
+              "": "waiting",
+            },
+          },
+          nextPlayer: {
+            entry: ["switchPlayer"],
+            on: {
+              "": [{ target: "attacking", cond: "isAI" }, "waiting"], //TODO: AI can only attack
+            },
+          },
+          playerWon: {
+            entry: ["awardXP", "removeBonuses"],
+            on: {
+              "": [
+                { actions: send("LEVEL_UP"), cond: "checkLevelUp" },
+                { actions: send("POST_BATTLE") },
+              ],
+            },
+          },
+          playerDied: {},
+        },
+      },
+      levelUp: {
+        entry: [{ type: "justLogIt", payload: "Player leveled up" }],
+        on: {
+          NEW_STATS: {
+            actions: ["applyNewStats"],
+            target: "postBattle",
+          },
+        },
+      },
+      postBattle: {
+        on: {
+          PICKUP_WEAPON: {
+            actions: ["pickUpWeapon"],
+            target: "",
+          },
+          DROP_WEAPON: {
+            target: "",
+            actions: ["dropWeapon"],
+          },
+          PICKUP_ITEM: {
+            actions: ["pickUpItem"],
+            target: "",
+          },
+          DROP_ITEM: {
+            target: "",
+            actions: ["dropItem"],
+          },
+          TELEPORT: "town",
+          NEXT: "nextEnemy",
+        },
+      },
+      nextEnemy: {
+        entry: ["createNewEnemy"],
+        on: {
+          "": "combat",
+        },
+      },
+      /*
+      
+      
+      
+      
+      
+      playerWon: {
+        
+      },
+      playerDied: {
+        on: {
+          PLAY_AGAIN: {
+            actions: ["reset"],
+            target: "idle",
+          },
+        },
+      },
+      
+      
+      
+      */
       /*
       blacksmith: {
         SELL_ITEM: {
