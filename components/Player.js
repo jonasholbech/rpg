@@ -32,7 +32,7 @@ export default class Player extends HTMLElement {
       <header>
           <h1>${this._state.name}</h1>
           <img src="https://avatars.dicebear.com/v2/bottts/${this._state.name}.svg" />
-          <div class="xp" style="transform:scaleX(0%)"></div>
+          <div class="xp"></div>
           <div class="hp">${this._state.hitpoints}</div>
       </header>
       <div class="actions"></div>
@@ -79,9 +79,13 @@ export default class Player extends HTMLElement {
     this._updateWeaponList();
   }
   _setLevel() {
-    this.nodes.level.style = `transform:scaleX(${
-      (this._state.xp / (Number(this._state.level) * 1000)) * 100
-    }%)`;
+    console.log(
+      this.nodes.level,
+      `scaleX(${(this._state.xp / (Number(this._state.level) * 1000)) * 100}%)`
+    );
+    this.nodes.level.style.transform = `scaleX(${
+      (this._state.xp / (Number(this._state.level) * 1000)) * 1
+    })`;
   }
 
   _setAttribute(attr) {

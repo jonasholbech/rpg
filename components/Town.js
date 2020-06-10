@@ -60,11 +60,11 @@ export default class Town extends HTMLElement {
       ) {
         this.nodes.merchantContainer.innerHTML = "";
         const merc = document.createElement("rpg-merchant");
+        merc.type = "items";
+        merc.merchantTitle = "Healer";
         merc.state = this._state;
         merc.send = this._send;
-        merc.type = "items";
 
-        merc.merchantTitle = "Healer";
         this.nodes.merchantContainer.appendChild(merc);
         this.nodes.merchant = this.querySelector(".merchants>*:first-child");
         console.log(document.querySelector("rpg-merchant").type);

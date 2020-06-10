@@ -11,7 +11,7 @@ export default class Monster extends HTMLElement {
   }
 
   _update(ctx) {
-    //console.log(ctx);
+    console.log(ctx);
     if (!this._nodes) {
       this._getNodes();
     }

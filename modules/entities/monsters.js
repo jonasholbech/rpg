@@ -51,7 +51,7 @@ export const monsters = [
   },
   {
     name: "Dinosaur Monster",
-    level: 1,
+    level: 4,
     attributes: {
       str: 20,
       dex: 1,

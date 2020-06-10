@@ -1,7 +1,6 @@
 import { getRndItems } from "../modules/entities/items";
 import { getRndWeapons } from "../modules/entities/weapons";
 class Merchant extends HTMLElement {
-  //TODO: laves om til rpg-merchant, typen er underordnet
   constructor() {
     super();
     this.nodes;
@@ -29,10 +28,13 @@ class Merchant extends HTMLElement {
     this._initialRender();
   }
   _update() {
-    console.log("update");
-    if (this.nodes.healBtn) {
-      this.nodes.healBtn.disabled = this._state.context.players[0].gold < 5;
-    }
+    this.nodes.healBtn.disabled =
+      this._state.context.players[0].gold < 5 ||
+      this._state.context.players[0].hitpoints >=
+        this._state.context.players[0].attributes.con * 2;
+    this.nodes.healBtn.style.display =
+      this._merchantTitle === "Healer" ? "default" : "none";
+
     this._setPlayerSelling("items");
   }
   _initialRender() {

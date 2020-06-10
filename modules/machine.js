@@ -2,6 +2,7 @@ import { Machine, send, sendParent } from "xstate";
 import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
 import initialContext from "./machineparts/initialContext";
+//TODO: tror player skal bruge observer så den er opdateret i baggrunden af diverse overlays
 //TODO: more logs
 //TODO: filter on logs (type)
 //TODO: player classes?
@@ -13,7 +14,7 @@ import initialContext from "./machineparts/initialContext";
 //TODO: initially we are in town, but the UI has a monster
 const RPGMachine = Machine(
   {
-    initial: "nextEnemy",
+    initial: "createCharacter",
     strict: true,
     id: "rpgmachine",
     context: { ...initialContext },
@@ -22,12 +23,12 @@ const RPGMachine = Machine(
         entry: [{ type: "addToLog", payload: "createCharacter" }],
         on: {
           ASSIGN_ATTR: {
-            target: "idle",
+            target: "beforeTown",
             actions: "setInitialAttributes",
           },
         },
       },
-      idle: {
+      beforeTown: {
         entry: [
           { type: "addToLog", payload: "idle" },
           "setInitialStats",
@@ -215,38 +216,6 @@ const RPGMachine = Machine(
           "": "combat",
         },
       },
-      /*
-      
-      
-      
-      
-      
-      playerWon: {
-        
-      },
-      playerDied: {
-        on: {
-          PLAY_AGAIN: {
-            actions: ["reset"],
-            target: "idle",
-          },
-        },
-      },
-      
-      
-      
-      */
-      /*
-      blacksmith: {
-        SELL_ITEM: {
-          target: "",
-          actions: "sellItem",
-        },
-        BUY_ITEM: {
-          target: "",
-          actions: "buyItem",
-        },
-      },*/
     },
   },
   {

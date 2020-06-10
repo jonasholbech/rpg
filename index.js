@@ -17,13 +17,11 @@ const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(
   (state) => {
-    console.log(state.context.currentPlayer, state.context);
     console.groupCollapsed("logger");
     console.log(state.value);
 
     console.log(state);
     console.groupEnd();
-    observer.publish("MONSTER_CONTEXT", state.context.players[1]);
     document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
     document.querySelector("rpg-interpreter").state = state;
     document.querySelector("rpg-interpreter").service = service;
@@ -43,6 +41,14 @@ function render(state) {
   }
   if (state.matches("combat")) {
     setupCombat(state);
+  }
+  if (state.matches("postBattle")) {
+    //document.querySelector("rpg-player").remove();
+    //document.querySelector("rpg-monster").remove();
+    openPostBattleScreen(state);
+  }
+  if (state.matches("levelUp")) {
+    openLevelUpScreen(state);
   }
 }
 function createCharacter(state) {
@@ -75,12 +81,28 @@ function setupCombat(state) {
 
     const monster = document.createElement("rpg-monster");
     document.querySelector("#players").appendChild(monster);
+    observer.publish("MONSTER_CONTEXT", state.context.players[1]);
   } else {
     const p = document.querySelector("rpg-player");
     p.state = state.context.players[0];
     p.active = state.context.currentPlayer === 0 ? true : false;
     p.nextEvents = state.nextEvents;
+    observer.publish("MONSTER_CONTEXT", state.context.players[1]);
   }
+}
+function openPostBattleScreen(state) {
+  const pbsComp = document.createElement("rpg-postbattle");
+  pbsComp.state = state;
+  pbsComp.send = service.send;
+  document.body.appendChild(pbsComp);
+}
+function openLevelUpScreen(state) {
+  const lu = document.createElement("rpg-levelup");
+  lu.str = state.context.players[state.context.currentPlayer].attributes.str;
+  lu.dex = state.context.players[state.context.currentPlayer].attributes.dex;
+  lu.con = state.context.players[state.context.currentPlayer].attributes.con;
+  lu.completeCallback = service.send;
+  document.body.appendChild(lu);
 }
 /*
 
@@ -118,20 +140,8 @@ function render(state) {
   }
 }
 
-function openLevelUpScreen(state) {
-  const lu = document.createElement("rpg-levelup");
-  lu.str = state.context.players[state.context.currentPlayer].attributes.str;
-  lu.dex = state.context.players[state.context.currentPlayer].attributes.dex;
-  lu.con = state.context.players[state.context.currentPlayer].attributes.con;
-  lu.completeCallback = service.send;
-  document.body.appendChild(lu);
-}
-function openPostBattleScreen(state) {
-  const pbsComp = document.createElement("rpg-postbattle");
-  pbsComp.state = state;
-  pbsComp.send = service.send;
-  document.body.appendChild(pbsComp);
-}
+
+
 
 
 */

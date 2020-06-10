@@ -13,7 +13,7 @@ export const actions = {
     players: (ctx, evt) => {
       const players = [...ctx.players];
       console.log("awardxp");
-      players[ctx.currentPlayer].xp += 100;
+      players[ctx.currentPlayer].xp += 1000;
       return players;
     },
   }),

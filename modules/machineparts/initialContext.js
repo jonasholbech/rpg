@@ -19,7 +19,7 @@ const initialContext = {
       },
       items: getRndItems(2, 4),
       bonuses: [],
-      weapons: [getPlayerStartingWeapon(), weapons[0]],
+      weapons: [getPlayerStartingWeapon()],
     },
     setupMonster(),
   ],
