@@ -16,6 +16,7 @@ const guards = {
     return AI.hitpoints < 1;
   },
   checkLevelUp: (context, evt) => {
+    console.log("checklevel up");
     return (
       context.players[context.currentPlayer].xp >=
       context.players[context.currentPlayer].level * 1000

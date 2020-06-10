@@ -1,4 +1,4 @@
-import { Machine, send } from "xstate";
+import { Machine, send, sendParent } from "xstate";
 import guards from "./machineparts/guards";
 import { actions } from "./machineparts/actions";
 import initialContext from "./machineparts/initialContext";
@@ -15,9 +15,11 @@ const RPGMachine = Machine(
   {
     initial: "nextEnemy",
     strict: true,
+    id: "rpgmachine",
     context: { ...initialContext },
     states: {
       createCharacter: {
+        entry: [{ type: "addToLog", payload: "createCharacter" }],
         on: {
           ASSIGN_ATTR: {
             target: "idle",
@@ -26,14 +28,18 @@ const RPGMachine = Machine(
         },
       },
       idle: {
-        entry: ["setInitialStats", "assignInitialItems"], //, "createNewEnemy"
+        entry: [
+          { type: "addToLog", payload: "idle" },
+          "setInitialStats",
+          "assignInitialItems",
+        ], //, "createNewEnemy"
         on: {
           "": "town",
         },
       },
 
       town: {
-        //TODO:
+        entry: [{ type: "addToLog", payload: "town" }],
         initial: "outskirts",
         on: {
           VISIT_HEALER: ".healer",
@@ -75,7 +81,7 @@ const RPGMachine = Machine(
       },
       combat: {
         initial: "waiting",
-        entry: ["switchPlayer"],
+        entry: [{ type: "addToLog", payload: "combat" }, "switchPlayer"],
         on: {
           ATTACK: ".attacking",
           PARRY: ".parrying",
@@ -83,11 +89,15 @@ const RPGMachine = Machine(
           USE_ITEM: [{ target: ".useItem", cond: "hasItems" }],
           LEVEL_UP: "levelUp",
           POST_BATTLE: "postBattle",
+          PLAY_AGAIN: "createCharacter",
         },
+
         states: {
-          waiting: {},
+          waiting: {
+            entry: { type: "addToLog", payload: "waiting" },
+          },
           attacking: {
-            entry: ["dealDamage"],
+            entry: [{ type: "addToLog", payload: "attacking" }, "dealDamage"],
             on: {
               "": [
                 {
@@ -123,24 +133,51 @@ const RPGMachine = Machine(
             },
           },
           nextPlayer: {
-            entry: ["switchPlayer"],
+            entry: [
+              { type: "addToLog", payload: "nextPlayer" },
+              "switchPlayer",
+            ],
             on: {
               "": [{ target: "attacking", cond: "isAI" }, "waiting"], //TODO: AI can only attack
             },
           },
           playerWon: {
-            entry: ["awardXP", "removeBonuses"],
+            entry: [
+              { type: "addToLog", payload: "Player Won" },
+              "awardXP",
+              "removeBonuses",
+            ],
             on: {
               "": [
-                { actions: send("LEVEL_UP"), cond: "checkLevelUp" },
-                { actions: send("POST_BATTLE") },
+                {
+                  target: "#levelUp",
+                  cond: "checkLevelUp",
+                },
+                {
+                  target: "#postBattle",
+                },
               ],
             },
           },
-          playerDied: {},
+
+          playerDied: {
+            entry: [{ type: "justLogIt", payload: "Player Died" }],
+            on: {
+              "": {
+                actions: ["reset"],
+                target: "#gameOver",
+              },
+            },
+          },
         },
       },
+      gameOver: {
+        id: "gameOver",
+        entry: [{ type: "justLogIt", payload: "Game over man!" }],
+        type: "final",
+      },
       levelUp: {
+        id: "levelUp",
         entry: [{ type: "justLogIt", payload: "Player leveled up" }],
         on: {
           NEW_STATS: {
@@ -150,6 +187,7 @@ const RPGMachine = Machine(
         },
       },
       postBattle: {
+        id: "postBattle",
         on: {
           PICKUP_WEAPON: {
             actions: ["pickUpWeapon"],

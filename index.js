@@ -17,11 +17,10 @@ const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(
   (state) => {
-    console.log(state.value);
+    console.log(state.context.currentPlayer, state.context);
     console.groupCollapsed("logger");
+    console.log(state.value);
 
-    console.log(state.context);
-    console.table(state.context.players[0].bonuses);
     console.log(state);
     console.groupEnd();
     observer.publish("MONSTER_CONTEXT", state.context.players[1]);
@@ -81,7 +80,6 @@ function setupCombat(state) {
     p.state = state.context.players[0];
     p.active = state.context.currentPlayer === 0 ? true : false;
     p.nextEvents = state.nextEvents;
-    p.active = state.context.currentPlayer === 0 ? true : false;
   }
 }
 /*

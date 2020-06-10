@@ -5,11 +5,14 @@ import { rndBetween, getAttributeWithBonuses } from "../utils";
 import { getRndItems } from "../entities/items";
 import { observer } from "../observer";
 import { all as weapons } from "../entities/weapons";
+const log = [];
+window.log = log;
 export const actions = {
   awardXP: assign({
     //TODO: xp kunne være summen af opponents stats?
     players: (ctx, evt) => {
       const players = [...ctx.players];
+      console.log("awardxp");
       players[ctx.currentPlayer].xp += 100;
       return players;
     },
@@ -17,6 +20,7 @@ export const actions = {
   reset: assign({
     players: (ctx) => {
       //using initialContext messses stuff up (xp and stuff is kept)
+      console.log("reset");
       const players = [
         {
           name: "Lord Holle",
@@ -90,7 +94,6 @@ export const actions = {
   }),
   switchWeapon: assign({
     players: (ctx, evt) => {
-      console.log(evt);
       const players = [...ctx.players];
       const oldWeapon = players[ctx.currentPlayer].weapons[0];
       const newWeapon = players[ctx.currentPlayer].weapons[evt.index];
@@ -192,6 +195,7 @@ export const actions = {
     players: (ctx, evt) => {
       const players = [...ctx.players];
       const bonuses = players[ctx.currentPlayer].bonuses;
+      console.log("remove bonuses");
       const modifiedBonuses = bonuses.map((b) => {
         b.duration--;
         return b;
@@ -310,6 +314,9 @@ export const actions = {
     console.log(action);
     console.log("logging it", ctx, evt);
     observer.publish("LOG", action.payload);
+  },
+  addToLog: (ctx, evt, { action }) => {
+    log.push(action.payload);
   },
 };
 function getNextPlayer(ctx) {

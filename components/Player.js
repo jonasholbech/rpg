@@ -9,7 +9,6 @@ export default class Player extends HTMLElement {
 
   set active(val) {
     this._active = val;
-    console.log("active:", this._active);
   }
   set send(val) {
     this._send = val;
@@ -32,21 +31,19 @@ export default class Player extends HTMLElement {
     this.innerHTML = `
       <header>
           <h1>${this._state.name}</h1>
-          <img src="https://avatars.dicebear.com/v2/bottts/${
-            this._state.name
-          }.svg" />
-          <div class="xp" style="transform:scaleX(${this._setLevel()}%)"></div>
+          <img src="https://avatars.dicebear.com/v2/bottts/${this._state.name}.svg" />
+          <div class="xp" style="transform:scaleX(0%)"></div>
           <div class="hp">${this._state.hitpoints}</div>
       </header>
       <div class="actions"></div>
       <div class="attributes">
           <dl>
               <dt>STR</dt>
-              <dd class="str">${this._setAttribute("str")}</dd>
+              <dd class="str"></dd>
               <dt>DEX</dt>
-              <dd class="dex">${this._setAttribute("dex")}</dd>
+              <dd class="dex"></dd>
               <dt>CON</dt>
-              <dd class="con">${this._setAttribute("con")}</dd>
+              <dd class="con"></dd>
           </dl>
       </div>
       <div class="weapons">
@@ -58,6 +55,7 @@ export default class Player extends HTMLElement {
   `;
     this.nodes = {
       hp: this.querySelector(".hp"),
+      level: this.querySelector(".xp"),
       str: this.querySelector(".str"),
       dex: this.querySelector(".dex"),
       con: this.querySelector(".con"),
@@ -65,9 +63,10 @@ export default class Player extends HTMLElement {
       items: this.querySelector(".items ol"),
       weapons: this.querySelector(".weapons ol"),
     };
-    this._setActions();
+    /* this._setActions();
     this._updateItemsList();
-    this._updateWeaponList();
+    this._updateWeaponList(); */
+    this._update();
   }
   _update() {
     this.nodes.hp.textContent = this._state.hitpoints;
@@ -80,10 +79,13 @@ export default class Player extends HTMLElement {
     this._updateWeaponList();
   }
   _setLevel() {
-    return (this._state.xp / (Number(this._state.level) * 1000)) * 100;
+    this.nodes.level.style = `transform:scaleX(${
+      (this._state.xp / (Number(this._state.level) * 1000)) * 100
+    }%)`;
   }
+
   _setAttribute(attr) {
-    return `${this._state.attributes[attr]} (+${
+    this.nodes[attr].textContent = `${this._state.attributes[attr]} (+${
       this._state.bonuses ? getAttributeBonuses(this._state, attr) : 0
     })`;
   }
