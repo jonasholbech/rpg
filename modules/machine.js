@@ -13,10 +13,18 @@ import initialContext from "./machineparts/initialContext";
 //TODO: initially we are in town, but the UI has a monster
 const RPGMachine = Machine(
   {
-    initial: "idle",
+    initial: "createCharacter",
     strict: true,
     context: { ...initialContext },
     states: {
+      createCharacter: {
+        on: {
+          ASSIGN_ATTR: {
+            target: "idle",
+            actions: "setInitialAttributes",
+          }
+        },
+      },
       idle: {
         entry: ["setInitialStats", "assignInitialItems"], //, "createNewEnemy"
         on: {

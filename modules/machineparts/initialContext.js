@@ -5,16 +5,17 @@ const initialContext = {
   currentPlayer: 1,
   players: [
     {
-      name: "Lord Holle",
+      name: "",
       hitpoints: 10,
       xp: 0,
       AI: false,
       level: 1,
       gold: 20,
+      pointsToDistribute:30,
       attributes: {
-        str: 10,
-        dex: 10,
-        con: 10,
+        str: 1,
+        dex: 1,
+        con: 1,
       },
       items: [],
       bonuses: [],

@@ -3,6 +3,7 @@ import { Machine, interpret } from "xstate";
 import RPGMachine from "./modules/machine";
 
 import { observer } from "./modules/observer";
+import CharacterBuilder from "./components/CharacterBuilder";
 import Player from "./components/Player";
 import InterpreterComponent from "./components/InterpreterComponent";
 import LevelUp from "./components/LevelUp";
@@ -29,8 +30,27 @@ const service = interpret(extendedMachine, { devTools: true }).onTransition(
 );
 
 window.service = service;
-
+service.start();
+function render(state) {
+  switch (state.value) {
+    case "createCharacter":
+      createCharacter(state);
+      break;
+  }
+}
+function createCharacter(state) {
+  const builder = document.createElement("rpg-character-builder");
+  builder.classList.add("overlay");
+  document.querySelector("main").appendChild(builder);
+  builder.state = state;
+  builder.send = service.send;
+}
+/*
 function firstPaint(initialContext) {
+  console.log("First Paint", initialContext);
+  
+}
+function firstPaintBCK(initialContext) {
   console.log("First Paint", initialContext);
   let player = initialContext.players[0];
 
@@ -57,7 +77,7 @@ function firstPaint(initialContext) {
     service.start();
   }, 1); //RAF instead? the service starts before the elements are registered
 }
-firstPaint(extendedMachine.context);
+//firstPaint(extendedMachine.context);
 
 function render(state) {
   document.querySelector("rpg-interpreter").nextEvents = state.nextEvents;
@@ -119,3 +139,4 @@ function openTownScreen(state) {
     document.querySelector("rpg-town").state = state;
   }
 }
+*/

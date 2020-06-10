@@ -111,6 +111,17 @@ export const actions = {
       return players;
     },
   }),
+  setInitialAttributes:assign({
+      players: (ctx,evt)=>{
+        const players = [...ctx.players];
+        players[0].attributes.str = evt.stats.str;
+        players[0].attributes.dex = evt.stats.dex;
+        players[0].attributes.con = evt.stats.con;
+        players[0].name=evt.name;
+        players[0].pointsToDistribute = players[0].pointsToDistribute - evt.stats.str - evt.stats.dex - evt.stats.con
+        return players;
+      }
+  }),
   setInitialStats: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
