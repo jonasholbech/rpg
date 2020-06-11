@@ -19,6 +19,13 @@ export const all = [
     price: 2,
   },
   {
+    name: "Club",
+    damageMin: 1,
+    damageMax: 4,
+    minLevel: 1,
+    price: 1,
+  },
+  {
     name: "Knife",
     damageMin: 1,
     damageMax: 4,
@@ -38,6 +45,24 @@ export const all = [
     damageMax: 8,
     minLevel: 1,
     price: 20,
+  },
+  {
+    name: "Halberd",
+    damageMin: 1,
+    damageMax: 10,
+    price: 50,
+  },
+  {
+    name: "Greataxe",
+    damageMin: 1,
+    damageMax: 12,
+    price: 100,
+  },
+  {
+    name: "Greatsword",
+    damageMin: 2,
+    damageMax: 12,
+    price: 150,
   },
   /*{
     name: "Debugger",
