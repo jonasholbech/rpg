@@ -13,8 +13,3 @@
    //TODO: skills and specials (monsters: [large, tiny, mighty etc]), skills (monsters?: [poisonous])
    //TODO: skills (enchantments) on weapons?
    //TODO: weapons that are picked up from monsters, are sold in bunches (no unique id?)
-
-midt i bonuses
-det skal MÅSKE laves ret meget om
-parry skal vare to ture (player=>monster)
-øvrige (potion) bonuser skal måske bare tæller runder i stedet for kampe?

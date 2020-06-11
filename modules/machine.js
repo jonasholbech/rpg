@@ -27,7 +27,7 @@ const RPGMachine = Machine(
       },
 
       town: {
-        entry: [{ type: "addToLog", payload: "town" }],
+        entry: [{ type: "addToLog", payload: "town" }, "removeAllBonuses"],
         initial: "outskirts",
         on: {
           VISIT_HEALER: ".healer",

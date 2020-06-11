@@ -199,6 +199,15 @@ export const actions = {
       return players;
     },
   }),
+  removeAllBonuses: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      players.forEach((pl) => {
+        pl.bonuses = [];
+      });
+      return players;
+    },
+  }),
   dropItem: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
