@@ -9,7 +9,6 @@ export default class Logger extends HTMLElement {
     observer.subscribe("LOG", this.addLogItem);
   }
   addLogItem(text) {
-    //TODO: accept arrays
     const log = {
       ts: new Date(),
       message: text,

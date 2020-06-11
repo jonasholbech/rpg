@@ -1,7 +1,6 @@
 import { getRndItems } from "../modules/entities/items";
 import { getRndWeapons } from "../modules/entities/weapons";
-//TODO: merchant udvalg resetter ved klik frem og tilbage mellem healer=>blacksmith
-//TODO: salg af items er gal igen, sikkert noget med id'et sælges et sværd, sælges alle
+
 class Merchant extends HTMLElement {
   constructor() {
     super();
@@ -91,7 +90,7 @@ class Merchant extends HTMLElement {
         li.append(
           thing.name + ` ${Math.floor(thing.price / 2) || 1}gcs `,
           button
-        ); //TODO: sell price modifier in settings module
+        );
         fragment.appendChild(li);
       }
     });
