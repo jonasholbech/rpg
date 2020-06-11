@@ -113,6 +113,7 @@ export const monsters = [
     },
   },
 ];
+//TODO: monsters should have treasures based on their level or something similar
 export function setupMonster() {
   const monster = { ...monsters[Math.floor(Math.random() * monsters.length)] };
   if (!monster.weapons) {

@@ -10,7 +10,7 @@ const initialContext = {
       xp: 0,
       AI: false,
       level: 1,
-      gold: 20,
+      gold: 15,
       pointsToDistribute: 30,
       attributes: {
         str: 12,

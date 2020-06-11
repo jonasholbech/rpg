@@ -30,11 +30,7 @@ const RPGMachine = Machine(
         },
       },
       beforeTown: {
-        entry: [
-          { type: "addToLog", payload: "idle" },
-          "setInitialStats",
-          "assignInitialItems",
-        ], //, "createNewEnemy"
+        entry: [{ type: "addToLog", payload: "idle" }, "setInitialStats"],
         on: {
           "": "town",
         },

@@ -97,5 +97,8 @@ export function getRndItems(min = 0, max = 2) {
     item.id = uniqid("item-");
     response.push(item);
   }
+
+  response.sort((a, b) => a.name > b.name);
+
   return response;
 }

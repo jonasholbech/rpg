@@ -139,13 +139,6 @@ export const actions = {
       return players;
     },
   }),
-  assignInitialItems: assign({
-    players: (ctx) => {
-      const players = [...ctx.players];
-      players[0].items = getRndItems(2, 4);
-      return players;
-    },
-  }),
   heal: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
@@ -289,6 +282,7 @@ export const actions = {
   sellItem: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
+      //TODO: add sold item to merchant
       /*
       evt=> type: "SELL_ITEM", id: "item-kb7qodvy", entityType: "items", price: 2 }
       */
