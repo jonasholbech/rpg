@@ -83,6 +83,10 @@ export default class CharacterBuilder extends HTMLElement {
     });
     this.nodes.inputName.addEventListener("input", (e) => this._updateForm());
     this.querySelectorAll(".buttongroup input").forEach((inp) => {
+      inp.addEventListener("click", (e) => {
+        inp.focus();
+        inp.select();
+      });
       inp.addEventListener("input", (e) => {
         this._updateForm();
       });
