@@ -113,9 +113,52 @@ export const monsters = [
     },
   },
 ];
+const types = [
+  {
+    prefix: "Tiny",
+    modifiers: {
+      str: -4,
+      dex: 2,
+      con: -4,
+    },
+  },
+  {
+    prefix: "Small",
+    modifiers: {
+      str: -2,
+      dex: 1,
+      con: -2,
+    },
+  },
+  {
+    prefix: "Normal",
+    modifiers: {
+      str: 0,
+      dex: 0,
+      con: 0,
+    },
+  },
+  {
+    prefix: "Big",
+    modifiers: {
+      str: 2,
+      dex: -1,
+      con: 2,
+    },
+  },
+  {
+    prefix: "Huge",
+    modifiers: {
+      str: 4,
+      dex: -2,
+      con: 4,
+    },
+  },
+];
 //TODO: monsters should have treasures based on their level or something similar
 export function setupMonster() {
-  const monster = { ...monsters[Math.floor(Math.random() * monsters.length)] };
+  let monster = { ...monsters[Math.floor(Math.random() * monsters.length)] };
+  monster = applyType(monster);
   if (!monster.weapons) {
     monster.weapons = [rndWeaponForLevel(monster.level)];
   }
@@ -127,5 +170,20 @@ export function setupMonster() {
   monster.items = getRndItems();
   monster.id = uniqid("monster-");
 
+  return monster;
+}
+function applyType(monster) {
+  const type = types[Math.floor(Math.random() * types.length)];
+  monster = modifyAttribute(monster, "str", type.modifiers.str);
+  monster = modifyAttribute(monster, "dex", type.modifiers.dex);
+  monster = modifyAttribute(monster, "con", type.modifiers.con);
+  monster.name = type.prefix + " " + monster.name;
+  return monster;
+}
+function modifyAttribute(monster, attr, modifier) {
+  monster.attributes[attr] += modifier;
+  if (monster.attributes[attr] < 1) {
+    monster.attributes[attr] = 1;
+  }
   return monster;
 }

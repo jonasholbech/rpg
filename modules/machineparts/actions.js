@@ -154,7 +154,7 @@ export const actions = {
       players[1] = setupMonster(); //TODO: index hardcodet, should it be?
       observer.publish(
         "LOG",
-        `A new enemy appears, a mighty ${players[1].name} (level ${players[1].level})`
+        `A new enemy appears, a ${players[1].name} (level ${players[1].level})`
       );
       return players;
     },
