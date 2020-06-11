@@ -13,6 +13,7 @@ import initialContext from "./machineparts/initialContext";
 //Spells are earned or picked up?
 //TODO: skills and specials (monsters: [large, tiny, mighty etc]), skills (monsters?: [poisonous])
 //TODO: skills (enchantments) on weapons?
+//TODO: weapons that are picked up from monsters, are sold in bunches (no unique id?)
 const RPGMachine = Machine(
   {
     initial: "createCharacter",

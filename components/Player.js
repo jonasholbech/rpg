@@ -31,6 +31,7 @@ export default class Player extends HTMLElement {
       <header>
           <h1>${this._state.name}</h1>
           <img src="https://avatars.dicebear.com/v2/bottts/${this._state.name}.svg" />
+          <div class="level"></div>
           <div class="xp"></div>
           <div class="hp">${this._state.hitpoints}</div>
       </header>
@@ -54,7 +55,8 @@ export default class Player extends HTMLElement {
   `;
     this.nodes = {
       hp: this.querySelector(".hp"),
-      level: this.querySelector(".xp"),
+      xp: this.querySelector(".xp"),
+      level: this.querySelector(".level"),
       str: this.querySelector(".str"),
       dex: this.querySelector(".dex"),
       con: this.querySelector(".con"),
@@ -72,17 +74,17 @@ export default class Player extends HTMLElement {
     this._setAttribute("str");
     this._setAttribute("dex");
     this._setAttribute("con");
+    this._setXP();
     this._setLevel();
     this._setActions();
     this._updateItemsList();
     this._updateWeaponList();
   }
   _setLevel() {
-    console.log(
-      this.nodes.level,
-      `scaleX(${(this._state.xp / (Number(this._state.level) * 1000)) * 100}%)`
-    );
-    this.nodes.level.style.transform = `scaleX(${
+    this.nodes.level.textContent = this._state.level;
+  }
+  _setXP() {
+    this.nodes.xp.style.transform = `scaleX(${
       (this._state.xp / (Number(this._state.level) * 1000)) * 1
     })`;
   }
