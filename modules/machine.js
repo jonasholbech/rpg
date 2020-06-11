@@ -176,7 +176,9 @@ const RPGMachine = Machine(
       gameOver: {
         id: "gameOver",
         entry: [{ type: "justLogIt", payload: "Game over man!" }],
-        type: "final",
+        on: {
+          PLAY_AGAIN: "createCharacter",
+        },
       },
       levelUp: {
         id: "levelUp",

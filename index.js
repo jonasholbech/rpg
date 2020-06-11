@@ -12,6 +12,7 @@ import PostBattle from "./components/PostBattle";
 import Monster from "./components/Monster";
 import Town from "./components/Town";
 import Merchant from "./components/Merchant";
+import GameOver from "./components/GameOver";
 
 const extendedMachine = RPGMachine.withConfig({});
 
@@ -49,6 +50,9 @@ function render(state) {
   }
   if (state.matches("levelUp")) {
     openLevelUpScreen(state);
+  }
+  if (state.matches("gameOver")) {
+    openGameOverScreen(state);
   }
 }
 function createCharacter(state) {
@@ -103,6 +107,13 @@ function openLevelUpScreen(state) {
   lu.con = state.context.players[state.context.currentPlayer].attributes.con;
   lu.completeCallback = service.send;
   document.body.appendChild(lu);
+}
+function openGameOverScreen(state) {
+  const go = document.createElement("rpg-gameover");
+  go.classList.add("overlay");
+  document.body.appendChild(go);
+  go.state = state;
+  go.send = service.send;
 }
 /*
 
