@@ -88,22 +88,13 @@ const RPGMachine = Machine(
             entry: [{ type: "addToLog", payload: "attacking" }, "dealDamage"],
             on: {
               "": [
-                {
-                  target: "nextPlayer",
-                  cond: "bothAlive",
-                },
-                {
-                  target: "playerWon",
-                  cond: "AIDied",
-                },
-                {
-                  target: "playerDied",
-                },
+                { target: "nextPlayer", cond: "bothAlive" },
+                { target: "playerWon", cond: "AIDied" },
+                { target: "playerDied" },
               ],
             },
           },
           parrying: {
-            //TODO: curse (bonus) on opponent, -50 on attack (dex)?, plus bonus on next attack (otherwise useless)
             entry: ["applyBonus"],
             on: {
               "": "nextPlayer",

@@ -111,7 +111,9 @@ export function getRndItems(min = 0, max = 2) {
   const amount = rndBetween(min, max);
   const response = [];
   for (let i = 0; i < amount; i++) {
-    const item = { ...items[Math.floor(Math.random() * items.length)] };
+    const item = JSON.parse(
+      JSON.stringify(items[Math.floor(Math.random() * items.length)])
+    );
     item.id = uniqid("item-");
     response.push(item);
   }

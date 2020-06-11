@@ -85,7 +85,7 @@ export const monsters = [
       },
     ],
   },
-  {
+  /*{
     name: "Dinosaur Monster",
     level: 4,
     attributes: {
@@ -102,7 +102,7 @@ export const monsters = [
         notCollectable: true,
       },
     ],
-  },
+  },*/
   {
     name: "møg unge",
     level: 1,
@@ -157,7 +157,8 @@ const types = [
 ];
 //TODO: monsters should have treasures based on their level or something similar
 export function setupMonster() {
-  let monster = { ...monsters[Math.floor(Math.random() * monsters.length)] };
+  const localMonsters = JSON.parse(JSON.stringify(monsters)); //Deep clone necessary
+  let monster = localMonsters[Math.floor(Math.random() * localMonsters.length)];
   monster = applyType(monster);
   if (!monster.weapons) {
     monster.weapons = [rndWeaponForLevel(monster.level)];
