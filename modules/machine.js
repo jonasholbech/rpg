@@ -11,7 +11,8 @@ import initialContext from "./machineparts/initialContext";
 //TODO: negative bonuses, poison (throwable on opponent, or through weapon (bite))
 //TODO: spells & mana, fires on own turn, but does not end it
 //Spells are earned or picked up?
-//TODO: initially we are in town, but the UI has a monster
+//TODO: skills and specials (monsters: [large, tiny, mighty etc]), skills (monsters?: [poisonous])
+//TODO: skills (enchantments) on weapons?
 const RPGMachine = Machine(
   {
     initial: "createCharacter",

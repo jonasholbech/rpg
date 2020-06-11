@@ -1,5 +1,7 @@
 import { getRndItems } from "../modules/entities/items";
 import { getRndWeapons } from "../modules/entities/weapons";
+//TODO: merchant udvalg resetter ved klik frem og tilbage mellem healer=>blacksmith
+//TODO: salg af items er gal igen, sikkert noget med id'et sælges et sværd, sælges alle
 class Merchant extends HTMLElement {
   constructor() {
     super();

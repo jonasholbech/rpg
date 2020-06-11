@@ -1,6 +1,8 @@
 import uniqid from "uniqid";
 import { rndBetween } from "../utils";
-//TODO: price on all weapons
+
+//TODO: more weapons
+//https://roll20.net/compendium/dnd5e/Weapons#content
 export const all = [
   {
     name: "Fork",

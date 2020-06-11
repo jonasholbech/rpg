@@ -1,5 +1,4 @@
 import { getAttributeBonuses } from "../modules/utils";
-//TODO: mimick Monster component, meget lækrere, skal nok også modtage mere state (currentState)
 export default class Player extends HTMLElement {
   constructor() {
     super();

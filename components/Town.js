@@ -68,7 +68,7 @@ export default class Town extends HTMLElement {
         this.nodes.merchantContainer.appendChild(merc);
         this.nodes.merchant = this.querySelector(".merchants>*:first-child");
         console.log(document.querySelector("rpg-merchant").type);
-      } //TODO: switch between merchants
+      }
     } else if (this._state.matches("town.blacksmith")) {
       if (
         !document.querySelector("rpg-merchant") ||

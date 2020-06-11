@@ -32,6 +32,24 @@ export const monsters = [
     },
   },
   {
+    name: "Boar",
+    level: 1,
+    attributes: {
+      str: 10,
+      dex: 7,
+      con: 3,
+    },
+    weapons: [
+      {
+        name: "Tusks",
+        damageMin: 1,
+        damageMax: 5,
+        minLevel: 1,
+        notCollectable: true,
+      },
+    ],
+  },
+  {
     name: "Cut Throat",
     level: 1,
     attributes: {
@@ -42,12 +60,30 @@ export const monsters = [
   },
   {
     name: "Orc",
-    level: 1,
+    level: 2,
     attributes: {
       str: 11,
       dex: 6,
       con: 10,
     },
+  },
+  {
+    name: "Zombie",
+    level: 1,
+    attributes: {
+      str: 8,
+      dex: 5,
+      con: 15,
+    },
+    weapons: [
+      {
+        name: "Bite",
+        damageMin: 4,
+        damageMax: 4,
+        minLevel: 1,
+        notCollectable: true,
+      },
+    ],
   },
   {
     name: "Dinosaur Monster",
