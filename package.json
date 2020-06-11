@@ -9,7 +9,7 @@
     "build": "parcel build index.html --public-url .",
     "deploy": "npm run build && gh-pages -d dist",
     "clean-start": "rm -rf dist/ && rm -rf .cache/ && rm -rf node_modules && npm install",
-    "analyze": "plato --recurse -d platoreports -t 'RPG Plato Report' -x 'platoreports|dist/|.cache/|node_modules/.git/' ."
+    "analyze": "plato --recurse -d platoreports -t 'RPG Plato Report' -x 'platoreports|dist/|.cache/|node_modules/|.git/|.vscode/' ."
   },
   "husky": {
     "hooks": {
