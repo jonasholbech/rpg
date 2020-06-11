@@ -267,15 +267,19 @@ export const actions = {
             { attribute: "dex", amount: 20, duration: 10 },
           */
       }
-      /*
-    actionPayload: {
-      type: "ATTR_CHANGE",
-      duration: "permanent",
-      attr: "hitpoints",
-      change: "1-8",
-    },
-        */
       player.items.splice(index, 1);
+      return players;
+    },
+  }),
+  applyBonus: assign({
+    players: (ctx, evt) => {
+      const players = [...ctx.players];
+      const bonuses = evt.bonuses;
+      bonuses.forEach((bonus) => {
+        players[bonus.playerIndex].bonuses.push(bonus);
+      });
+
+      console.log(evt);
       return players;
     },
   }),

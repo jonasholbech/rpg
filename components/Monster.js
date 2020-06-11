@@ -34,11 +34,11 @@ export default class Monster extends HTMLElement {
     this._nodes.img.src = `https://avatars.dicebear.com/v2/bottts/${ctx.name}.svg`;
     this._nodes.hp.textContent = ctx.hitpoints;
     this._nodes.str.textContent = ctx.attributes.str;
-    this._nodes.strBonus.textContent = 0;
+    this._nodes.strBonus.textContent = getAttributeBonuses(ctx, "str");
     this._nodes.dex.textContent = ctx.attributes.dex;
-    this._nodes.dexBonus.textContent = 0;
+    this._nodes.dexBonus.textContent = getAttributeBonuses(ctx, "dex");
     this._nodes.con.textContent = ctx.attributes.con;
-    this._nodes.conBonus.textContent = 0;
+    this._nodes.conBonus.textContent = getAttributeBonuses(ctx, "con");
   }
   _getNodes() {
     this._nodes = {
@@ -66,11 +66,11 @@ export default class Monster extends HTMLElement {
       <div class="attributes">
           <dl>
               <dt>STR</dt>
-              <dd class="str"><span>TODO STR</span> (+<span>TODO BONUS</span>)</dd>
+              <dd class="str"><span>TODO STR</span> (<span>TODO BONUS</span>)</dd>
               <dt>DEX</dt>
-              <dd class="dex"><span>TODO DEX</span> (+<span>TODO BONUS</span>)</dd>
+              <dd class="dex"><span>TODO DEX</span> (<span>TODO BONUS</span>)</dd>
               <dt>CON</dt>
-              <dd class="con"><span>TODO CON</span> (+<span>TODO BONUS</span>)</dd>
+              <dd class="con"><span>TODO CON</span> (<span>TODO BONUS</span>)</dd>
           </dl>
       </div>
       <div class="weapons">

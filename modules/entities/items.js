@@ -22,7 +22,7 @@ export const items = [
     price: 10,
     actionPayload: {
       type: "ATTR_CHANGE",
-      duration: 1,
+      duration: 10,
       attr: "str",
       change: 10,
     },
@@ -44,7 +44,7 @@ export const items = [
     price: 10,
     actionPayload: {
       type: "ATTR_CHANGE",
-      duration: 1,
+      duration: 10,
       attr: "dex",
       change: 10,
     },
@@ -88,7 +88,25 @@ export const items = [
     amount: "1-10",
   },
 ];
-
+//non usable bonuses
+//bonuses are applied to currentPlayer
+//curses to nextPlayer
+export const bonuses = {
+  parryBonus: {
+    type: "ATTR_CHANGE",
+    duration: "turn",
+    attr: "dex",
+    change: 50,
+    duration: 2,
+  },
+  parryCurse: {
+    type: "ATTR_CHANGE",
+    duration: "turn",
+    attr: "dex",
+    change: -50,
+    duration: 2,
+  },
+};
 export function getRndItems(min = 0, max = 2) {
   const amount = rndBetween(min, max);
   const response = [];
@@ -97,8 +115,6 @@ export function getRndItems(min = 0, max = 2) {
     item.id = uniqid("item-");
     response.push(item);
   }
-
   response.sort((a, b) => a.name > b.name);
-
   return response;
 }

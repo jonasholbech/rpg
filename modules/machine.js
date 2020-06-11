@@ -104,6 +104,7 @@ const RPGMachine = Machine(
           },
           parrying: {
             //TODO: curse (bonus) on opponent, -50 on attack (dex)?, plus bonus on next attack (otherwise useless)
+            entry: ["applyBonus"],
             on: {
               "": "nextPlayer",
             },
@@ -124,17 +125,20 @@ const RPGMachine = Machine(
             entry: [
               { type: "addToLog", payload: "nextPlayer" },
               "switchPlayer",
+              "removeBonuses",
             ],
             on: {
-              "": [{ target: "attacking", cond: "isAI" }, "waiting"], //TODO: AI can only attack
+              "": [
+                {
+                  target: "attacking",
+                  cond: "isAI",
+                },
+                "waiting",
+              ], //TODO: AI can only attack
             },
           },
           playerWon: {
-            entry: [
-              { type: "addToLog", payload: "Player Won" },
-              "awardXP",
-              "removeBonuses",
-            ],
+            entry: [{ type: "addToLog", payload: "Player Won" }, "awardXP"],
             on: {
               "": [
                 {

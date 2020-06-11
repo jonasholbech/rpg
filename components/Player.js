@@ -1,4 +1,5 @@
 import { getAttributeBonuses } from "../modules/utils";
+import { bonuses } from "../modules/entities/items";
 export default class Player extends HTMLElement {
   constructor() {
     super();
@@ -105,7 +106,17 @@ export default class Player extends HTMLElement {
           b.textContent = ev;
           b.dataset.event = ev;
           b.onclick = () => {
-            this._send(ev);
+            if (ev === "ATTACK") {
+              this._send(ev);
+            } else {
+              this._send({
+                type: "PARRY",
+                bonuses: [
+                  { ...bonuses.parryBonus, playerIndex: 0 },
+                  { ...bonuses.parryCurse, playerIndex: 1 },
+                ],
+              });
+            }
           };
           this.nodes.actions.appendChild(b);
         }
