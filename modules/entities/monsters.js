@@ -59,6 +59,15 @@ export const monsters = [
     },
   },
   {
+    name: "the killer",
+    level: 50,
+    attributes: {
+      str: 50,
+      dex: 50,
+      con: 50,
+    },
+  },
+  {
     name: "Orc",
     level: 2,
     attributes: {

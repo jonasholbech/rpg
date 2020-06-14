@@ -85,7 +85,7 @@ export const items = [
   {
     name: "Gold",
     usable: false,
-    amount: "1-10",
+    amount: "1-100",
   },
 ];
 //non usable bonuses

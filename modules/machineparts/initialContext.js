@@ -5,7 +5,7 @@ const initialContext = {
   currentPlayer: 1,
   players: [
     {
-      name: "Jonas",
+      name: "Storm og Birk",
       hitpoints: 10,
       xp: 0,
       AI: false,

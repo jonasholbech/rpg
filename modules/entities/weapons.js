@@ -12,6 +12,13 @@ export const all = [
     price: 1,
   },
   {
+    name: "pistol",
+    damageMin: 1,
+    damageMax: 25,
+    minLevel: 50,
+    price: 200000,
+  },
+  {
     name: "Sharp Fork",
     damageMin: 1,
     damageMax: 2,
