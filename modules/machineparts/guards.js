@@ -6,7 +6,10 @@ const guards = {
     return ctx.players[ctx.currentPlayer].AI;
   },
   hasItems: (ctx, evt) => {
-    return ctx.players[ctx.currentPlayer].items.length > 0; //TODO: filter on usable
+    const usable = ctx.players[ctx.currentPlayer].items.filter(
+      (item) => item.usable
+    );
+    return usable.length > 0;
   },
   bothAlive: (ctx, event) => {
     return ctx.players.every((pl) => pl.hitpoints > 0);
