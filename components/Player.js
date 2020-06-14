@@ -151,7 +151,7 @@ export default class Player extends HTMLElement {
       const span = document.createElement("span");
 
       const b = document.createElement("button");
-      b.textContent = "Activate";
+      b.textContent = "Use";
       span.textContent = `${w.name} (${w.damageMin}-${w.damageMax})`;
       b.addEventListener("click", (e) => {
         this._switch(i);
@@ -160,7 +160,8 @@ export default class Player extends HTMLElement {
       if (
         this._active &&
         this._nextEvents &&
-        this._nextEvents.includes("SWITCH_WEAPON")
+        this._nextEvents.includes("SWITCH_WEAPON") &&
+        i !== 0
       ) {
         b.disabled = false;
       }
