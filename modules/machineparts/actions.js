@@ -151,7 +151,7 @@ export const actions = {
   createNewEnemy: assign({
     players: (ctx) => {
       const players = [...ctx.players];
-      players[1] = setupMonster(); //TODO: index hardcodet, should it be?
+      players[1] = setupMonster();
       observer.publish(
         "LOG",
         `A new enemy appears, a ${players[1].name} (level ${players[1].level})`
@@ -164,23 +164,29 @@ export const actions = {
   }),
   dropWeapon: assign({
     players: (ctx, evt) => {
-      const players = [...ctx.players]; //TODO: (flere steder) skal bruge itemid i stedet
-      players[0].weapons.splice(Number(evt.index), 1);
+      const players = [...ctx.players];
+      players[0].weapons = players[0].weapons.filter(
+        (weapon) => weapon.id !== evt.id
+      );
       return players;
     },
   }),
   pickUpWeapon: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
-      console.log(ctx.players[1], evt.index);
-      const index = Number(evt.index);
-      observer.publish(
-        "LOG",
-        `Player picked up a ${players[1].weapons[index].name}`
+
+      const id = evt.id;
+      const weaponIndex = players[1].weapons.findIndex(
+        (item) => item.id === id
       );
 
-      players[0].weapons.push(players[1].weapons[index]);
-      players[1].weapons.splice(index, 1);
+      observer.publish(
+        "LOG",
+        `Player picked up a ${players[1].weapons[weaponIndex].name}`
+      );
+
+      players[0].weapons.push(players[1].weapons[weaponIndex]);
+      players[1].weapons.splice(weaponIndex, 1);
       return players;
     },
   }),
@@ -218,23 +224,24 @@ export const actions = {
   pickUpItem: assign({
     players: (ctx, evt) => {
       const players = [...ctx.players];
-      const index = Number(evt.index);
+      const id = evt.id;
+      const itemIndex = players[1].items.findIndex((item) => item.id === id);
+      //TODO: hertil ikke testet, leder efter index og bruger id i stedet
       observer.publish(
         "LOG",
-        `Player picked up a ${players[1].items[index].name}`
+        `Player picked up a ${players[1].items[itemIndex].name}`
       );
-
-      switch (players[1].items[index].name) {
+      switch (players[1].items[itemIndex].name) {
         case "Gold":
-          const [min, max] = players[1].items[index].amount.split("-");
+          const [min, max] = players[1].items[itemIndex].amount.split("-");
           const gold = rndBetween(min, max);
           players[0].gold += gold;
           break;
         default:
-          players[0].items.push(players[1].items[index]);
+          players[0].items.push(players[1].items[itemIndex]);
       }
 
-      players[1].items.splice(index, 1);
+      players[1].items.splice(itemIndex, 1);
       return players;
     },
   }),
@@ -244,8 +251,8 @@ export const actions = {
 
       const players = [...ctx.players];
       const player = players[ctx.currentPlayer];
-      const index = Number(evt.index);
-      const item = player.items[index];
+      const id = evt.id;
+      const item = player.items.find((item) => item.id === id);
       console.log(evt, item.actionPayload);
       switch (item.actionPayload.type) {
         case "ATTR_CHANGE":
@@ -276,7 +283,7 @@ export const actions = {
             { attribute: "dex", amount: 20, duration: 10 },
           */
       }
-      player.items.splice(index, 1);
+      player.items = player.items.filter((oneItem) => oneItem.id !== id);
       return players;
     },
   }),

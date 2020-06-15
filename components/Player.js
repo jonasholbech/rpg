@@ -133,7 +133,7 @@ export default class Player extends HTMLElement {
         b = document.createElement("button");
         b.textContent = "Use";
         b.addEventListener("click", (e) => {
-          this._use_item(i);
+          this._use_item(w.id);
         });
       }
       if (b) {
@@ -176,10 +176,10 @@ export default class Player extends HTMLElement {
       index: index,
     });
   }
-  _use_item(index) {
+  _use_item(id) {
     this._send({
       type: "USE_ITEM",
-      index: index,
+      id: id,
     });
   }
 }
