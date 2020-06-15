@@ -13,7 +13,7 @@ import Monster from "./components/Monster";
 import Town from "./components/Town";
 import Merchant from "./components/Merchant";
 import GameOver from "./components/GameOver";
-
+import BonusCounter from "./components/BonusCounter";
 const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(

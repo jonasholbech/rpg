@@ -50,6 +50,9 @@ export default class Player extends HTMLElement {
       <div class="weapons">
           <ol></ol>  
       </div>
+      <div class="powerups">
+        <ol></ol>  
+      </div>
       <div class="items">
           <ol></ol>  
       </div>
@@ -64,6 +67,7 @@ export default class Player extends HTMLElement {
       actions: this.querySelector(".actions"),
       items: this.querySelector(".items ol"),
       weapons: this.querySelector(".weapons ol"),
+      bonuses: this.querySelector(".powerups ol"),
     };
     /* this._setActions();
     this._updateItemsList();
@@ -78,8 +82,9 @@ export default class Player extends HTMLElement {
     this._setXP();
     this._setLevel();
     this._setActions();
-    this._updateItemsList();
+    this._updateItemList();
     this._updateWeaponList();
+    this._updatePowerupList();
   }
   _setLevel() {
     this.nodes.level.textContent = this._state.level;
@@ -123,7 +128,7 @@ export default class Player extends HTMLElement {
       });
     }
   }
-  _updateItemsList() {
+  _updateItemList() {
     this.nodes.items.innerHTML = "";
     this._state.items.forEach((w, i) => {
       const li = document.createElement("li");
@@ -144,8 +149,20 @@ export default class Player extends HTMLElement {
       this.nodes.items.appendChild(li);
     });
   }
+  _updatePowerupList() {
+    this.nodes.bonuses.innerHTML = "";
+    console.log(this._state.bonuses);
+    const fragment = document.createDocumentFragment();
+    this._state.bonuses.forEach((bonus) => {
+      const bc = document.createElement("rpg-bonus-counter");
+      bc.state = bonus;
+      fragment.append(bc);
+    });
+    this.nodes.bonuses.append(fragment);
+  }
   _updateWeaponList() {
     this.nodes.weapons.innerHTML = "";
+    //TODO: nok også på itemlist, documentragment
     this._state.weapons.forEach((w, i) => {
       const li = document.createElement("li");
       const span = document.createElement("span");
