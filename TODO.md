@@ -14,3 +14,4 @@
 14. skills (enchantments) on weapons?
 15. //TODO: weapons that are picked up from monsters, are sold in bunches (no unique id?)
 16. bonus counter/indicator in player/monster (a new component?)
+17. Armor?
