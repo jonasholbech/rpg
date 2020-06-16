@@ -39,6 +39,7 @@ export default class Monster extends HTMLElement {
     this._nodes.dexBonus.textContent = getAttributeBonuses(ctx, "dex");
     this._nodes.con.textContent = ctx.attributes.con;
     this._nodes.conBonus.textContent = getAttributeBonuses(ctx, "con");
+    this._nodes.level.textContent = ctx.level;
   }
   _getNodes() {
     this._nodes = {
@@ -53,6 +54,7 @@ export default class Monster extends HTMLElement {
       conBonus: this.querySelector(".con span:last-child"),
       weapons: this.querySelector(".weapons ol"),
       items: this.querySelector(".items ol"),
+      level: this.querySelector(".level"),
     };
   }
   _initialRender() {
@@ -60,6 +62,7 @@ export default class Monster extends HTMLElement {
       <header>
           <h1>TODO NAME</h1>
           <img src="https://avatars.dicebear.com/v2/bottts/TODO NAME.svg" />
+          <div class="level"></div>
           <div class="hp">TODO HP</div>
       </header>
       <div class="actions"></div>

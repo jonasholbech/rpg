@@ -151,7 +151,7 @@ export const actions = {
   createNewEnemy: assign({
     players: (ctx) => {
       const players = [...ctx.players];
-      players[1] = setupMonster();
+      players[1] = setupMonster(players[0].level);
       observer.publish(
         "LOG",
         `A new enemy appears, a ${players[1].name} (level ${players[1].level})`
