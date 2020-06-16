@@ -5,11 +5,10 @@
 5. more logs
 6. filter on logs? (type)
 7. player classes?
-8. auto combat? setinterval=>attack (+ level up?)
-9. negative bonuses, poison (throwable on opponent, or through weapon (bite))
-10. spells & mana, fires on own turn, but does not end it
-11. //Spells are earned or picked up?
-12. skills and specials , skills (monsters?: [poisonous])
-13. skills (enchantments) on weapons?
-14. bonus counter/indicator in player/monster (a new component?), already implemented in player
-15. Armor?
+8. negative bonuses, poison (throwable on opponent, or through weapon (bite))
+9. spells & mana, fires on own turn, but does not end it
+10. //Spells are earned or picked up?
+11. skills and specials , skills (monsters?: [poisonous])
+12. skills (enchantments) on weapons?
+13. bonus counter/indicator in player/monster (a new component?), already implemented in player
+14. Armor?
