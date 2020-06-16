@@ -3,12 +3,14 @@ import { bonuses } from "../modules/entities/items";
 export default class Player extends HTMLElement {
   constructor() {
     super();
-    this._nodex;
+    this._nodes;
     this._state;
+    this._autoCombat = false;
   }
 
   set active(val) {
     this._active = val;
+    this._handleAutoCombat();
   }
   set send(val) {
     this._send = val;
@@ -23,6 +25,22 @@ export default class Player extends HTMLElement {
     }
   }
 
+  _handleAutoCombat() {
+    console.log(this._nextEvents);
+    const buttons = this.querySelectorAll("button");
+    if (
+      this._autoCombat &&
+      this._active &&
+      this._nextEvents.includes("ATTACK")
+    ) {
+      buttons.forEach((btn) => (btn.disabled = true));
+      setTimeout(() => {
+        this._send("ATTACK");
+      }, 1000);
+    } else {
+      buttons.forEach((btn) => (btn.disabled = false)); //TODO: minor hickup, first weapon button is now enabled
+    }
+  }
   connectedCallback() {
     this._render();
   }
@@ -106,6 +124,7 @@ export default class Player extends HTMLElement {
     } else if (this._nextEvents && this._active) {
       this.nodes.actions.innerHTML = "";
       this._nextEvents.forEach((ev) => {
+        //TODO: fragment, and store fragment in property to re-add
         if (["ATTACK", "PARRY"].includes(ev)) {
           const b = document.createElement("button");
           b.textContent = ev;
@@ -126,6 +145,17 @@ export default class Player extends HTMLElement {
           this.nodes.actions.appendChild(b);
         }
       });
+      const label = document.createElement("label");
+      label.textContent = "Auto Combat:";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = this._autoCombat;
+      checkbox.addEventListener("click", (e) => {
+        this._autoCombat = checkbox.checked;
+        this._handleAutoCombat();
+      });
+      label.appendChild(checkbox);
+      this.nodes.actions.appendChild(label);
     }
   }
   _updateItemList() {
@@ -151,7 +181,6 @@ export default class Player extends HTMLElement {
   }
   _updatePowerupList() {
     this.nodes.bonuses.innerHTML = "";
-    console.log(this._state.bonuses);
     const fragment = document.createDocumentFragment();
     this._state.bonuses.forEach((bonus) => {
       const bc = document.createElement("rpg-bonus-counter");
