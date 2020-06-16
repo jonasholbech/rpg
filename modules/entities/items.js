@@ -1,6 +1,7 @@
 import uniqid from "uniqid";
 import { rndBetween } from "../utils";
 export const items = [
+  //TODO: initialDuration on items
   //TODO: change should be an integer
   //amount is the split with an interval
   //TODO: modify chances for each one
