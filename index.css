@@ -30,7 +30,8 @@ rpg-monster header h1,
 rpg-player header .hp,
 rpg-monster header .hp,
 rpg-player header .xp,
-rpg-player header .level {
+rpg-player header .level,
+rpg-monster header .level {
   position: absolute;
   z-index: 1;
   margin: 0;
@@ -41,7 +42,8 @@ rpg-monster header h1 {
 }
 rpg-player header .hp,
 rpg-monster header .hp,
-rpg-player header .level {
+rpg-player header .level,
+rpg-monster header .level {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -49,7 +51,8 @@ rpg-player header .level {
   font-size: 3rem;
   padding: 0.3rem;
 }
-rpg-player header .level {
+rpg-player header .level,
+rpg-monster header .level {
   bottom: initial;
   top: 0;
 }

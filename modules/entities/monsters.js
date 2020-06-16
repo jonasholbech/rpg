@@ -1,6 +1,6 @@
 import uniqid from "uniqid";
 import { rndWeaponForLevel } from "./weapons";
-import { getAttributeWithBonuses, ID } from "../utils";
+import { getAttributeWithBonuses, inBounds, rndBetween } from "../utils";
 import { getRndItems } from "./items";
 
 export const monsters = [
@@ -78,7 +78,7 @@ export const monsters = [
   },
   {
     name: "Zombie",
-    level: 1,
+    level: 2,
     attributes: {
       str: 8,
       dex: 5,
@@ -114,7 +114,7 @@ export const monsters = [
   },*/
   {
     name: "møg unge",
-    level: 1,
+    level: 2,
     attributes: {
       str: 1,
       dex: 50,
@@ -165,17 +165,26 @@ const types = [
   },
 ];
 //TODO: monsters should have treasures based on their level or something similar
-//TODO: monsters should have "appropriate" levels, like +/-2 to player level (i think monsters are purely random now)
-//TODO: monster levels should affact stats and weapons
-export function setupMonster() {
-  const localMonsters = JSON.parse(JSON.stringify(monsters)); //Deep clone necessary
-  let monster = localMonsters[Math.floor(Math.random() * localMonsters.length)];
+export function setupMonster(level = 1) {
+  const monsterLevel = inBounds(rndBetween(level - 2, level + 2), 1, level + 2);
+  const filteredMonsters = monsters.filter((monster) => monster.level <= level);
+  //Deep clone necessary
+  let monster = JSON.parse(
+    JSON.stringify(
+      filteredMonsters[Math.floor(Math.random() * filteredMonsters.length)]
+    )
+  );
   monster = applyType(monster);
+  monster.level = monsterLevel;
   if (!monster.weapons) {
     monster.weapons = [rndWeaponForLevel(monster.level)];
   }
-
+  const attrs = ["str", "con", "dex"];
+  for (let i = 0; i < monsterLevel; i++) {
+    monster = modifyAttribute(monster, attrs[rndBetween(0, 2)], 1);
+  }
   monster.bonuses = [];
+
   monster.gold = 0; //TODO: gold er i items for monstre, kan måske undværes
   monster.hitpoints = getAttributeWithBonuses(monster, "con") * 2;
   monster.AI = true;
