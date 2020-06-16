@@ -8,7 +8,7 @@ const RPGMachine = Machine(
     initial: "createCharacter",
     strict: true,
     id: "rpgmachine",
-    context: { ...initialContext },
+    context: JSON.parse(JSON.stringify(initialContext)),
     states: {
       createCharacter: {
         entry: [{ type: "addToLog", payload: "createCharacter" }],

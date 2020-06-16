@@ -5,6 +5,7 @@ import { rndBetween, getAttributeWithBonuses } from "../utils";
 import { getRndItems } from "../entities/items";
 import { observer } from "../observer";
 import { all as weapons } from "../entities/weapons";
+
 const log = [];
 window.log = log;
 export const actions = {
@@ -19,27 +20,8 @@ export const actions = {
   }),
   reset: assign({
     players: (ctx) => {
-      //using initialContext messses stuff up (xp and stuff is kept)
       console.log("reset");
-      const players = [
-        {
-          name: "Lord Holle",
-          hitpoints: 10,
-          xp: 0,
-          AI: false,
-          level: 1,
-          gold: 0,
-          attributes: {
-            str: 10,
-            dex: 10,
-            con: 10,
-          },
-          items: [],
-          bonuses: [],
-          weapons: [weapons.find((weapon) => weapon.name === "Knife")],
-        },
-        setupMonster(),
-      ];
+      players = JSON.parse(JSON.stringify(initialContext.players));
       return players;
     },
     currentPlayer: (ctx) => {
