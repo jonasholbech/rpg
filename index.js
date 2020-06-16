@@ -14,6 +14,27 @@ import Town from "./components/Town";
 import Merchant from "./components/Merchant";
 import GameOver from "./components/GameOver";
 import BonusCounter from "./components/BonusCounter";
+
+const debug = true;
+const steps = [
+  "rpg-character-builder input[type='submit']",
+  "rpg-town button[data-event='LEAVE']",
+];
+window.addEventListener("load", (e) => {
+  if (debug) {
+    let count = 0;
+    function proceed() {
+      setTimeout(() => {
+        document.querySelector(steps[count]).click();
+        count++;
+        if (count < steps.length) {
+          proceed();
+        }
+      }, 10);
+    }
+    proceed();
+  }
+});
 const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(

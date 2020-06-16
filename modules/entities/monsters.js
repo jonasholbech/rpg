@@ -3,8 +3,6 @@ import { rndWeaponForLevel } from "./weapons";
 import { getAttributeWithBonuses, inBounds, rndBetween } from "../utils";
 import { getRndItems } from "./items";
 
-//TODO: initial level is not used for anything right now
-//could use it to hide some monsters for later, like weapons
 export const monsters = [
   {
     name: "Snotling",
@@ -71,7 +69,7 @@ export const monsters = [
   },*/
   {
     name: "Orc",
-    level: 1,
+    level: 2,
     attributes: {
       str: 11,
       dex: 6,
@@ -80,7 +78,7 @@ export const monsters = [
   },
   {
     name: "Zombie",
-    level: 1,
+    level: 2,
     attributes: {
       str: 8,
       dex: 5,
@@ -116,7 +114,7 @@ export const monsters = [
   },*/
   {
     name: "møg unge",
-    level: 1,
+    level: 2,
     attributes: {
       str: 1,
       dex: 50,
@@ -169,9 +167,13 @@ const types = [
 //TODO: monsters should have treasures based on their level or something similar
 export function setupMonster(level = 1) {
   const monsterLevel = inBounds(rndBetween(level - 2, level + 2), 1, level + 2);
-
-  const localMonsters = JSON.parse(JSON.stringify(monsters)); //Deep clone necessary
-  let monster = localMonsters[Math.floor(Math.random() * localMonsters.length)];
+  const filteredMonsters = monsters.filter((monster) => monster.level <= level);
+  //Deep clone necessary
+  let monster = JSON.parse(
+    JSON.stringify(
+      filteredMonsters[Math.floor(Math.random() * filteredMonsters.length)]
+    )
+  );
   monster = applyType(monster);
   monster.level = monsterLevel;
   if (!monster.weapons) {
