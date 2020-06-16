@@ -58,7 +58,7 @@ export const monsters = [
       con: 4,
     },
   },
-  {
+  /*{
     name: "the killer",
     level: 50,
     attributes: {
@@ -66,7 +66,7 @@ export const monsters = [
       dex: 50,
       con: 50,
     },
-  },
+  },*/
   {
     name: "Orc",
     level: 2,
@@ -165,6 +165,8 @@ const types = [
   },
 ];
 //TODO: monsters should have treasures based on their level or something similar
+//TODO: monsters should have "appropriate" levels, like +/-2 to player level (i think monsters are purely random now)
+//TODO: monster levels should affact stats and weapons
 export function setupMonster() {
   const localMonsters = JSON.parse(JSON.stringify(monsters)); //Deep clone necessary
   let monster = localMonsters[Math.floor(Math.random() * localMonsters.length)];
