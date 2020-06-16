@@ -12,3 +12,4 @@
 12. skills (enchantments) on weapons?
 13. bonus counter/indicator in player/monster (a new component?), already implemented in player
 14. Armor?
+15. merchants skal kun sælge min level items/weapons?

@@ -164,6 +164,7 @@ const types = [
     },
   },
 ];
+//TODO: mest for egen læring skyld, hvis jeg putter monster i en json fil (configuration), vil mine deep clone issues så forsvinde?
 //TODO: monsters should have treasures based on their level or something similar
 export function setupMonster(level = 1) {
   const monsterLevel = inBounds(rndBetween(level - 2, level + 2), 1, level + 2);

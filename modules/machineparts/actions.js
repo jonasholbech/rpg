@@ -253,7 +253,8 @@ export const actions = {
       const player = players[ctx.currentPlayer];
       const id = evt.id;
       const item = player.items.find((item) => item.id === id);
-      console.log(evt, item.actionPayload);
+
+      observer.publish("LOG", `Player used a ${item.name}`);
       switch (item.actionPayload.type) {
         case "ATTR_CHANGE":
           if (item.actionPayload.duration === "permanent") {
@@ -306,6 +307,11 @@ export const actions = {
       /*
       evt=> type: "SELL_ITEM", id: "item-kb7qodvy", entityType: "items", price: 2 }
       */
+      const soldItem = players[0][evt.entityType].find(
+        (item) => item.id === evt.id
+      );
+      observer.publish("LOG", `Player sold a ${soldItem.name}`);
+      console.log(evt.entityType, players[0][evt.entityType]);
       players[0][evt.entityType] = players[0][evt.entityType].filter(
         (item) => item.id != evt.id
       );
@@ -319,6 +325,7 @@ export const actions = {
       /*
       evt=> type: "BUY_ITEM", id: "item-kb7qodvy", entityType: "items", item: {...} }
       */
+      observer.publish("LOG", `Player bought a ${evt.item.name}`);
       players[0][evt.entityType].push(evt.item);
       players[0].gold -= evt.item.price;
       return players;
