@@ -87,7 +87,7 @@ export function rndWeaponForLevel(lvl) {
   return weapon;
 }
 export function getPlayerStartingWeapon() {
-  const weapon = { ...all.find((weapon) => weapon.name === "Knife") };
+  const weapon = { ...all.find((weapon) => weapon.name === "Knife") }; //weapons objects are only one level deep, so no need for a deep clone
   weapon.id = uniqid("weapon-");
   return weapon;
 }
