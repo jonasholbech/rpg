@@ -39,6 +39,7 @@ const extendedMachine = RPGMachine.withConfig({});
 
 const service = interpret(extendedMachine, { devTools: true }).onTransition(
   (state) => {
+    //TODO: if state.changed
     console.groupCollapsed("logger");
     console.log(state.value);
 

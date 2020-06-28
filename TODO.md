@@ -13,3 +13,5 @@
 12. bonus counter/indicator in player/monster (a new component?), already implemented in player
 13. Armor?
 14. merchants skal kun sælge min level items/weapons?
+15. save games (array in localstorage)
+16. Validation on create character form
